@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Validations from '../Validations/Validations'
 import './modal.css'
 
 const Modal = ({ setShowModal, validations, setValidations,tableKeys }) => {
@@ -34,7 +35,7 @@ const Modal = ({ setShowModal, validations, setValidations,tableKeys }) => {
           <option value="duplicate">duplicate</option>
         </select>
         <button onClick={addValidation}>add</button>
-
+        <Validations validations={validations} />
       </div>
     </div>
   </div>

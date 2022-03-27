@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import * as XLSX from 'xlsx'
 import Modal from '../Modal/Modal'
 import Problems from '../Problems/Problems'
+import Validations from '../Validations/Validations'
 
 import './main.css'
 
@@ -34,6 +35,7 @@ const Main = () => {
   const getTableKeys = ws => {
     const rangeCells = XLSX.utils.decode_range(ws['!ref'])
     const headerRow = rangeCells.s.r
+    console.log('header row: ',headerRow)
     const startingCol = rangeCells.s.c
     const endingCol = rangeCells.e.c
     const headers = []
@@ -65,11 +67,12 @@ const Main = () => {
       console.log('row[value] :',rowObj[value])
       const currValidation = validations[value]
       const currValue = rowObj[value]
+      // if (!currValue)
       if (currValidation === 'email'){
         if (!validateEmail(currValue)) setProblems([...problems,{rowNum: rowObj.__rowNum__ , problem: `invalid Email: ${currValue}`}])
       }
       if (currValidation === 'phone'){
-        if (validatePhone(currValue)) setProblems([...problems,{rowNum: rowObj.__rowNum__ , problem: `invalid Phone: ${currValue}`}])
+        if (!validatePhone(currValue+'')) setProblems([...problems,{rowNum: rowObj.__rowNum__ , problem: `invalid Phone: ${currValue}`}])
       }
       if (currValidation === 'full'){
 
@@ -84,13 +87,7 @@ const Main = () => {
 
 const validateEmail = str => str.match(/^\S+@\S+\.\S+$/)
 const validatePhone = str => str.match(/^05[0-9]{8}$|^5[0-9]{8}$/)
-const renderValidations = () => {
 
-  for (let valid in validations) {
-    return <li><p>{valid}</p><p>{validations[valid]}</p></li>
-  }
-
-}
 
 useEffect(() => {
   // console.log('work sheet: ', workSheet)
@@ -104,13 +101,8 @@ return <div className="main-container">
     <button disabled={!tableKeys.length} onClick={validateSheet}>Validate</button>
   </div>
 
+  <Validations  validations={validations} />
 
-  <div className="validations-container">
-    <ul className="validation-list">
-      <li className='validation-item'><p>Field</p><p>Validation</p></li>
-      {renderValidations()}
-    </ul>
-  </div>
 
   <Problems problems={problems} />
   {showModal && <Modal
