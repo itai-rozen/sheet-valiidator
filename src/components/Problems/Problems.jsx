@@ -13,7 +13,7 @@ const Problems = ({ problems }) => {
   {problems.map((problem,i) => {
     return  <li key={i} className="problem-item">
     <div className="problem-container">
-      <p className="row-number">{problem.rowNum}</p>
+      <p className="row-number">{problem.rowNum+1}</p>
       <p className="row-problem">{problem.problem}</p>
     </div>
   </li>

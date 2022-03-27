@@ -7,7 +7,7 @@ const Modal = ({ setShowModal, validations, setValidations,tableKeys }) => {
   const [field, setField] = useState('')
 
   const addValidation = () => {
-    setValidations( {...validations, [field] : validation})
+    if (validations[field] !== validation) setValidations( {...validations, [field] : validation})
   }
 
 
@@ -19,8 +19,8 @@ const Modal = ({ setShowModal, validations, setValidations,tableKeys }) => {
       <button onClick={() => setShowModal(false)}>X</button>
       <div className="field-input">
 
-        <select defaultValue={'Choose field'} className="table-keys-select" id="valids" onChange={e => setField(e.target.value)}>
-          <option disabled  value="Choose field">Choose field</option>
+        <select defaultValue={'Choose column'} className="table-keys-select" id="valids" onChange={e => setField(e.target.value)}>
+          <option disabled  value="Choose column">Choose column</option>
           {
             tableKeys.map(tableKey => {
               return <option key={tableKey} value={tableKey}>{tableKey}</option>

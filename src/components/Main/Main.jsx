@@ -51,11 +51,6 @@ const Main = () => {
     sheetData.forEach(row => {
       console.log(row)
       validateRow(row)
-      // tableKeys.forEach(key => {
-        // if (!row[key]) setProblems(...problems, {
-          //   rowNum: row.__rowNum__ + 1,
-          // })
-      // })
     })
   }
 
@@ -75,19 +70,22 @@ const Main = () => {
           validationFunc = validateEmail;
           break;
         case 'phone':
-          validationFunc = validatePhone
+          validationFunc = validatePhone;
+          break;
+        case 'full':
+          validationFunc = validateFullCells;
           break;
         default:
           validationFunc = console.log
       }
-      if (!validationFunc(currValue + '')) setProblems(prevArr => [...prevArr, {rowNum: rowObj.__rowNum__ , problem: `invalid ${currValidation} -  ${currValue}`}])
+      if (!validationFunc(currValue + '')) setProblems(prevArr => [...prevArr, {rowNum: rowObj.__rowNum__ , problem: `invalid ${currValidation === 'full'? 'empty cell' : currValidation}  -  ${currValue}`}])
     }
   
 }
 
 const validateEmail = str => str.match(/^\S+@\S+\.\S+$/)
 const validatePhone = str => str.match(/^05[0-9]{8}$|^5[0-9]{8}$/)
-
+const validateFullCells = str => str.trim() !== 'undefined'
 
 useEffect(() => {
   console.log('problems: ', problems)
