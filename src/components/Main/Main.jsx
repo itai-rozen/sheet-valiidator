@@ -47,19 +47,19 @@ const Main = () => {
   }
 
   const validateSheet = () => {
+    setProblems([])
     sheetData.forEach(row => {
       console.log(row)
-      tableKeys.forEach(key => {
+      validateRow(row)
+      // tableKeys.forEach(key => {
         // if (!row[key]) setProblems(...problems, {
-        //   rowNum: row.__rowNum__ + 1,
-        // })
-        validateRow(row)
-      })
+          //   rowNum: row.__rowNum__ + 1,
+          // })
+      // })
     })
   }
 
   const validateRow = rowObj => {
-    let problems = []
     for (const value in validations) {
       console.log('validations: ', validations)
       console.log('value: ', value)
@@ -67,20 +67,20 @@ const Main = () => {
       console.log('row[value] :',rowObj[value])
       const currValidation = validations[value]
       const currValue = rowObj[value]
+      console.log('is phone valid? ', validatePhone(currValue+''))
       // if (!currValue)
-      if (currValidation === 'email'){
-        if (!validateEmail(currValue)) setProblems([...problems,{rowNum: rowObj.__rowNum__ , problem: `invalid Email: ${currValue}`}])
+      let validationFunc
+      switch(currValidation){
+        case 'email':
+          validationFunc = validateEmail;
+          break;
+        case 'phone':
+          validationFunc = validatePhone
+          break;
+        default:
+          validationFunc = console.log
       }
-      if (currValidation === 'phone'){
-        if (!validatePhone(currValue+'')) setProblems([...problems,{rowNum: rowObj.__rowNum__ , problem: `invalid Phone: ${currValue}`}])
-      }
-      if (currValidation === 'full'){
-
-      }
-      if (currValidation === 'duplicate'){
-
-      }
-
+      if (!validationFunc(currValue + '')) setProblems(prevArr => [...prevArr, {rowNum: rowObj.__rowNum__ , problem: `invalid ${currValidation} -  ${currValue}`}])
     }
   
 }
@@ -90,8 +90,8 @@ const validatePhone = str => str.match(/^05[0-9]{8}$|^5[0-9]{8}$/)
 
 
 useEffect(() => {
-  // console.log('work sheet: ', workSheet)
-}, [])
+  console.log('problems: ', problems)
+}, [problems])
 
 return <div className="main-container">
   <h1>Sheet evaluator</h1>

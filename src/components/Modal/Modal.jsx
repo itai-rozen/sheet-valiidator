@@ -7,7 +7,7 @@ const Modal = ({ setShowModal, validations, setValidations,tableKeys }) => {
   const [field, setField] = useState('')
 
   const addValidation = () => {
-    setValidations({...validations, [field] : validation})
+    setValidations( {...validations, [field] : validation})
   }
 
 
