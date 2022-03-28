@@ -35,7 +35,6 @@ const Main = () => {
   const getTableKeys = ws => {
     const rangeCells = XLSX.utils.decode_range(ws['!ref'])
     const headerRow = rangeCells.s.r
-    console.log('header row: ',headerRow)
     const startingCol = rangeCells.s.c
     const endingCol = rangeCells.e.c
     const headers = []
@@ -48,22 +47,20 @@ const Main = () => {
 
   const validateSheet = () => {
     setProblems([])
-    sheetData.forEach(row => {
+    sheetData.forEach((row,i) => {
       console.log(row)
-      validateRow(row)
+      validateRow(row,i)
     })
   }
 
-  const validateRow = rowObj => {
+  const validateRow = (rowObj,index) => {
     for (const value in validations) {
-      console.log('validations: ', validations)
-      console.log('value: ', value)
-      console.log('validations[value]: ', validations[value])
-      console.log('row[value] :',rowObj[value])
+      // console.log('validations: ', validations)
+      // console.log('value: ', value)
+      // console.log('validations[value]: ', validations[value])
+      // console.log('row[value] :',rowObj[value])
       const currValidation = validations[value]
       const currValue = rowObj[value]
-      console.log('is phone valid? ', validatePhone(currValue+''))
-      // if (!currValue)
       let validationFunc
       switch(currValidation){
         case 'email':
@@ -75,21 +72,34 @@ const Main = () => {
         case 'full':
           validationFunc = validateFullCells;
           break;
+        case 'duplicate':
+          validationFunc = validateDuplicateCells;
+          break;
         default:
           validationFunc = console.log
+          break;
       }
-      if (!validationFunc(currValue + '')) setProblems(prevArr => [...prevArr, {rowNum: rowObj.__rowNum__ , problem: `invalid ${currValidation === 'full'? 'empty cell' : currValidation}  -  ${currValue}`}])
+      if (!validationFunc(currValue + '',index,value)) setProblems(prevArr => [...prevArr, {rowNum: rowObj.__rowNum__ , problem: `invalid ${currValidation === 'full'? 'empty cell' : currValidation}  -  ${currValue}`}])
     }
   
 }
 
-const validateEmail = str => str.match(/^\S+@\S+\.\S+$/)
-const validatePhone = str => str.match(/^05[0-9]{8}$|^5[0-9]{8}$/)
-const validateFullCells = str => str.trim() !== 'undefined'
+const validateEmail = (str,_,_2) => str.match(/^\S+@\S+\.\S+$/)
 
+const validatePhone = (str,_,_2) => {
+  const cleanStr = cleanString(str)
+  return cleanStr.match(/^05[0-9]{8}$|^5[0-9]{8}$/)
+} 
+
+const validateFullCells = (str,_,_2) => str.trim() !== 'undefined'
+
+const validateDuplicateCells = (str,i,col) => !sheetData.find((row,index) => (row[col] === str && i !== index))
+
+const cleanString = str =>  str.replace(/^972|[+().]/g, '')
+  
 useEffect(() => {
-  console.log('problems: ', problems)
-}, [problems])
+  console.log(cleanString('97266.21.56'))
+}, [])
 
 return <div className="main-container">
   <h1>Sheet evaluator</h1>
