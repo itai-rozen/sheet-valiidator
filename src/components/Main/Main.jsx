@@ -69,7 +69,7 @@ const Main = () => {
         case 'phone':
           validationFunc = validatePhone;
           break;
-        case 'full':
+        case 'empty cells':
           validationFunc = validateFullCells;
           break;
         case 'duplicate':
@@ -79,7 +79,7 @@ const Main = () => {
           validationFunc = console.log
           break;
       }
-      if (!validationFunc(currValue + '',index,value)) setProblems(prevArr => [...prevArr, {rowNum: rowObj.__rowNum__ , problem: `invalid ${currValidation === 'full'? 'empty cell' : currValidation}  -  ${currValue}`}])
+      if (!validationFunc(currValue + '',index,value)) setProblems(prevArr => [...prevArr, {rowNum: rowObj.__rowNum__ , problem:currValidation, value:currValue}])
     }
   
 }

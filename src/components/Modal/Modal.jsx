@@ -31,8 +31,8 @@ const Modal = ({ setShowModal, validations, setValidations,tableKeys }) => {
           <option  disabled >Choose validation</option>
           <option value="email">email</option>
           <option value="phone">phone</option>
-          <option value="full">no empty cells</option>
-          <option value="duplicate">duplicate</option>
+          <option value="empty cells">no empty cells</option>
+          <option value="duplicates">duplicates</option>
         </select>
         <button onClick={addValidation}>add</button>
         <Validations validations={validations} />
