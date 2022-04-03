@@ -8,7 +8,7 @@ import './main.css'
 
 const Main = () => {
   const [sheetData, setSheetData] = useState([])
-  const [validations, setValidations] = useState({})
+  const [validations, setValidations] = useState({phone:'phone'})
   const [tableKeys, setTableKeys] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [problems, setProblems] = useState([])
@@ -35,6 +35,7 @@ const Main = () => {
 
   const addRowsToTable = async rows => {
     for (const row of rows){
+      console.log('row: ',row)
       try {
         await addRowToSql(row)
       } catch(err){
@@ -53,6 +54,7 @@ const Main = () => {
       let cell = ws[XLSX.utils.encode_cell({ c: i, r: headerRow })]
       if (cell && cell.t) headers.push(XLSX.utils.format_cell(cell))
     }
+    headers.unshift('rowNum')
     setTableKeys(headers)
     createSqlTable(headers)
   }
@@ -87,7 +89,12 @@ const Main = () => {
           validationFunc = console.log
           break;
       }
-      if (!validationFunc(currValue + '', index, value)) setProblems(prevArr => [...prevArr, { rowNum: rowObj.__rowNum__, problem: currValidation, value: currValue }])
+      if (!validationFunc(currValue + '', index, value)){
+        const problemObj = { rowNum: rowObj.__rowNum__, problem: currValidation, value: currValue }
+        console.log('problem object: ',problemObj)
+        setProblems(prevArr => [...prevArr, problemObj])
+        addRowToSql(problemObj, 'invalid')
+      } 
     }
 
   }
@@ -105,11 +112,10 @@ const Main = () => {
 
   const cleanString = str => str.replace(/^972|[+().]/g, '')
 
-  const addRowToSql = async (rowObj) => {
-    // const res = await (await fetch('http://localhost:3001/')).json()
-    // console.log(res)
+  const addRowToSql = async (rowObj, endpoint = '') => {
     console.log('json stringy : ', JSON.stringify(rowObj))
-    const rawResponse = await fetch('http://localhost:3001/', {
+    if (!endpoint) rowObj.rowNum = rowObj.__rowNum__
+    const rawResponse = await fetch(`http://localhost:3001/${endpoint}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -130,7 +136,6 @@ const Main = () => {
           'Access-Control-Allow-Origin': '*'
         }
       })
-      console.log('after creating table: ', rawResponse)
     } catch (err) {
       console.log(err)
     }
