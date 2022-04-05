@@ -116,7 +116,7 @@ const Main = () => {
   const addRowToSql = async (rowObj, endpoint = '') => {
     console.log('json stringy : ', JSON.stringify(rowObj))
     if (!endpoint) rowObj.rowNum = rowObj.__rowNum__+1
-    const rawResponse = await fetch(`https://sheet-server.netlify.app/.netlify/functions/index/${endpoint}`, {
+    await fetch(`https://sheet-server.netlify.app/.netlify/functions/index/${endpoint}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -129,7 +129,7 @@ const Main = () => {
 
   const createSqlTable = async tableHeaders => {
     try {
-      const rawResponse = await fetch('https://sheet-server.netlify.app/.netlify/functions/index/create-table', {
+      await fetch('https://sheet-server.netlify.app/.netlify/functions/index/create-table', {
         method: 'POST',
         body: JSON.stringify(tableHeaders),
         headers: {
