@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import * as XLSX from 'xlsx'
+import Inputs from '../Inputs/Inputs'
 import Modal from '../Modal/Modal'
 import Problems from '../Problems/Problems'
 import Validations from '../Validations/Validations'
@@ -8,7 +9,7 @@ import './main.css'
 
 const Main = () => {
   const [sheetData, setSheetData] = useState([])
-  const [validations, setValidations] = useState({phone:'phone'})
+  const [validations, setValidations] = useState({})
   const [tableKeys, setTableKeys] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [problems, setProblems] = useState([])
@@ -34,11 +35,11 @@ const Main = () => {
   }
 
   const addRowsToTable = async rows => {
-    for (const row of rows){
-      console.log('row: ',row)
+    for (const row of rows) {
+      console.log('row: ', row)
       try {
         await addRowToSql(row)
-      } catch(err){
+      } catch (err) {
         console.log(err)
       }
     }
@@ -89,12 +90,12 @@ const Main = () => {
           validationFunc = console.log
           break;
       }
-      if (!validationFunc(currValue + '', index, value)){
-        const problemObj = { rowNum: rowObj.__rowNum__, problem: currValidation, value: currValue }
-        console.log('problem object: ',problemObj)
+      if (!validationFunc(currValue + '', index, value)) {
+        const problemObj = { rowNum: rowObj.__rowNum__+1, problem: currValidation, value: currValue }
+        console.log('problem object: ', problemObj)
         setProblems(prevArr => [...prevArr, problemObj])
         addRowToSql(problemObj, 'invalid')
-      } 
+      }
     }
 
   }
@@ -114,12 +115,13 @@ const Main = () => {
 
   const addRowToSql = async (rowObj, endpoint = '') => {
     console.log('json stringy : ', JSON.stringify(rowObj))
-    if (!endpoint) rowObj.rowNum = rowObj.__rowNum__
-    const rawResponse = await fetch(`http://localhost:3001/${endpoint}`, {
+    if (!endpoint) rowObj.rowNum = rowObj.__rowNum__+1
+    const rawResponse = await fetch(`https://sheet-server.netlify.app/.netlify/functions/index/${endpoint}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify(rowObj)
     });
@@ -127,7 +129,7 @@ const Main = () => {
 
   const createSqlTable = async tableHeaders => {
     try {
-      const rawResponse = await fetch('http://localhost:3001/create-table', {
+      const rawResponse = await fetch('https://sheet-server.netlify.app/.netlify/functions/index/create-table', {
         method: 'POST',
         body: JSON.stringify(tableHeaders),
         headers: {
@@ -147,16 +149,12 @@ const Main = () => {
 
   return <div className="main-container">
     <h1>Sheet evaluator</h1>
-    <div className="input-container">
-      <input type="file" onChange={uploadFile} />
-      <button disabled={!tableKeys.length} onClick={() => setShowModal(true)}>add validations</button>
-      <button disabled={!tableKeys.length} onClick={validateSheet}>Validate</button>
+    <Inputs uploadFile={uploadFile} tableKeys={tableKeys} setShowModal={setShowModal} validateSheet={validateSheet} />
+
+    <div className="sheet-details-container">
+      <Validations validations={validations} />
+      <Problems problems={problems} />
     </div>
-
-    <Validations validations={validations} />
-
-
-    <Problems problems={problems} />
     {showModal && <Modal
       setShowModal={setShowModal}
       validations={validations}

@@ -2,7 +2,6 @@ import React from 'react'
 import './problems.css'
 
 const Problems = ({ problems }) => {
-  console.log('problems: ',problems)
   return   <div className="problems-container">
   <h2>Problems in table</h2>
   <ul className="problem-headers">
@@ -14,7 +13,7 @@ const Problems = ({ problems }) => {
   {problems.map((problem,i) => {
     return  <li key={i} className="problem-item">
     <div className="problem-container">
-      <p className="row-number">{+problem.rowNum+1}</p>
+      <p className="row-number">{problem.rowNum}</p>
       <p className="row-problem">{problem.problem}</p>
       <p className="row-problem">{problem.value}</p>
     </div>

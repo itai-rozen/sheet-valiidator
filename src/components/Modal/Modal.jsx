@@ -12,17 +12,16 @@ const Modal = ({ setShowModal, validations, setValidations,tableKeys }) => {
 
 
   useEffect(() => {
-    console.log(validations)
-  },[validations])
+  },[])
   return <div className="add-validation modal-container close">
     <div className="modal">
-      <button onClick={() => setShowModal(false)}>X</button>
+      <button className='close-btn' onClick={() => setShowModal(false)}>X</button>
       <div className="field-input">
 
         <select defaultValue={'Choose column'} className="table-keys-select" id="valids" onChange={e => setField(e.target.value)}>
           <option disabled  value="Choose column">Choose column</option>
           {
-            tableKeys.map(tableKey => {
+            tableKeys.filter(key => key !== 'rowNum').map(tableKey => {
               return <option key={tableKey} value={tableKey}>{tableKey}</option>
             })
           }

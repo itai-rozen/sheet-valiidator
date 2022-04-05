@@ -11,3 +11,11 @@ ul {
 li {
   display: flex;
 }
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}

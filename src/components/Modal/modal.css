@@ -11,10 +11,30 @@
   align-items: center;
 }
 
+
+
 .modal {
   width: 50%;
   height: 60%;
+  padding: 20px 0;
   background-color: white;
   border: 2px solid black;
   border-radius: 6px;
 }
+
+.close-btn {
+  font-size: 2rem;
+  margin: 5px;
+  padding: 15px;
+  float: left;
+  border-radius: 12px;
+  background-color: pink;
+}
+
+.field-input select, .field-input button {
+  font-size: 1.2rem;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 12px;
+}
+

@@ -1,0 +1,18 @@
+.problems-container {
+  width: 80vw;
+}
+
+.problem-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.problem-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.problem-container p {
+  width: 33%;
+}
