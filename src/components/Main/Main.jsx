@@ -13,7 +13,9 @@ const Main = () => {
   const [tableKeys, setTableKeys] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [problems, setProblems] = useState([])
-
+  const PATH = process.env.NODE_ENV === 'development' ? 
+                                        'http://localhost:9000/.netlify/functions/index' :   
+                                        'https://sheet-server.netlify.app/.netlify/functions/index'
   const uploadFile = e => {
     const file = e.target.files[0]
     console.log(file)
@@ -61,9 +63,9 @@ const Main = () => {
   }
 
   const validateSheet = () => {
+    console.log('path: ',PATH)
     setProblems([])
     sheetData.forEach((row, i) => {
-      console.log(row)
       validateRow(row, i)
     })
   }
@@ -116,12 +118,13 @@ const Main = () => {
   const addRowToSql = async (rowObj, endpoint = '') => {
     console.log('json stringy : ', JSON.stringify(rowObj))
     if (!endpoint) rowObj.rowNum = rowObj.__rowNum__+1
-    await fetch(`https://sheet-server.netlify.app/.netlify/functions/index/${endpoint}`, {
+    await fetch(`${PATH}/${endpoint}`, {
       method: 'POST',
+      mode: 'no-cors',
       headers: {
+        'Access-Control-Allow-Origin': '*',
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(rowObj)
     });
@@ -129,7 +132,7 @@ const Main = () => {
 
   const createSqlTable = async tableHeaders => {
     try {
-      await fetch('https://sheet-server.netlify.app/.netlify/functions/index/create-table', {
+      await fetch(`${PATH}/create-table`, {
         method: 'POST',
         body: JSON.stringify(tableHeaders),
         headers: {
@@ -144,7 +147,6 @@ const Main = () => {
   }
 
   useEffect(() => {
-
   }, [])
 
   return <div className="main-container">
