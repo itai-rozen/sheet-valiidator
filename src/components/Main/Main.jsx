@@ -144,12 +144,20 @@ const Main = () => {
     }
   }
 
+  const downloadFile = async () => {
+    const newSheet = XLSX.utils.json_to_sheet(sheetData)
+    console.log('new sheet : ',newSheet)
+    const newWorkBook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(newWorkBook, newSheet, "mod sheet")
+    XLSX.writeFile(newWorkBook, "fixed table.xlsx")
+  }
+
   useEffect(() => {
   }, [])
 
   return <div className="main-container">
     <h1>Sheet evaluator</h1>
-    <Inputs uploadFile={uploadFile} tableKeys={tableKeys} setShowModal={setShowModal} validations={validations} validateSheet={validateSheet} />
+    <Inputs downloadFile={downloadFile} uploadFile={uploadFile} tableKeys={tableKeys} setShowModal={setShowModal} validations={validations} validateSheet={validateSheet} />
 
     <div className="sheet-details-container">
       <Validations validations={validations} />
