@@ -18,7 +18,6 @@ const Main = () => {
                                         'https://sheet-server.netlify.app/.netlify/functions/index'
   const uploadFile = e => {
     const file = e.target.files[0]
-    console.log(file)
 
     const fileReader = new FileReader()
     fileReader.readAsArrayBuffer(file)
@@ -26,7 +25,7 @@ const Main = () => {
     fileReader.onload = e => {
       const bufferArray = e.target.result
       const workBook = XLSX.read(bufferArray, { type: "buffer" })
-      console.log('work book: ', workBook)
+      // console.log('work book: ', workBook)
       const workSheetName = workBook.SheetNames[0]
       const workSheet = workBook.Sheets[workSheetName]
       getTableKeys(workSheet)
@@ -38,7 +37,6 @@ const Main = () => {
 
   const addRowsToTable = async rows => {
     for (const row of rows) {
-      console.log('row: ', row)
       try {
         await addRowToSql(row)
       } catch (err) {
@@ -151,7 +149,7 @@ const Main = () => {
 
   return <div className="main-container">
     <h1>Sheet evaluator</h1>
-    <Inputs uploadFile={uploadFile} tableKeys={tableKeys} setShowModal={setShowModal} validateSheet={validateSheet} />
+    <Inputs uploadFile={uploadFile} tableKeys={tableKeys} setShowModal={setShowModal} validations={validations} validateSheet={validateSheet} />
 
     <div className="sheet-details-container">
       <Validations validations={validations} />

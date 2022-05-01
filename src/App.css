@@ -4,18 +4,4 @@
   box-sizing: border-box;
 }
 
-ul {
-  display:  flex;
-}
 
-li {
-  display: flex;
-}
-
-button {
-  cursor: pointer;
-}
-
-button:disabled {
-  cursor: not-allowed;
-}

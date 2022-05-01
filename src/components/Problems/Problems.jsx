@@ -7,7 +7,7 @@ const Problems = ({ problems }) => {
   <ul className="problem-headers">
     <li className="problem-header">Row number</li>
     <li className="problem-header">Problem</li>
-    <li className="problem-header">Value</li>
+    <li className="problem-header grow">Value</li>
   </ul>
   <ul className="problem-list">
   {problems.map((problem,i) => {
@@ -15,7 +15,7 @@ const Problems = ({ problems }) => {
     <div className="problem-container">
       <p className="row-number">{problem.rowNum}</p>
       <p className="row-problem">{problem.problem}</p>
-      <p className="row-problem">{problem.value}</p>
+      <p className="row-problem grow">{problem.value}</p>
     </div>
   </li>
   })}

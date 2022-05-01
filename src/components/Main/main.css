@@ -1,9 +1,25 @@
+ul {
+  display:  flex;
+}
 
+li {
+  display: flex;
+}
 
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
 .main-container {
   text-align: center;
   background-color: #ADEBBB;
   height: 100vh;
+  width: 100%;
+  z-index: 1;
+  position: absolute;
   margin: 0;
   padding: 0;
 }
@@ -24,22 +40,3 @@ ul {
   justify-content: space-around;
 }
 
-.problem-list {
-  flex-direction: column;
-  align-items: center;
-}
-.problem-item {
-  width: 100%;
-}
-.problem-container {
-  display: flex;
-  justify-content: space-evenly;
-  width: 100%;
-}
-
-.problem-headers {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin: 5px auto;
-  border-top: 2px dotted black;
-}

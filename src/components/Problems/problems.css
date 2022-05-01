@@ -1,5 +1,5 @@
 .problems-container {
-  width: 80vw;
+  width: 70vw;
 }
 
 .problem-list {
@@ -7,12 +7,29 @@
   flex-direction: column;
   align-items: center;
 }
-
+.problem-item { 
+  width: 100%;
+}
 .problem-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  width: 100%;
+  text-align: left;
 }
 
-.problem-container p {
-  width: 33%;
+.problem-container > *, .problem-headers > *{
+  /* width: 33%; */
+  flex-grow: 1;
+}
+
+li.grow, p.grow {
+  flex-grow: 4;
+}
+
+
+.problem-headers {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 5px auto;
+  border-top: 2px dotted black;
 }
