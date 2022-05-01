@@ -25,13 +25,13 @@ const Main = () => {
     fileReader.onload = e => {
       const bufferArray = e.target.result
       const workBook = XLSX.read(bufferArray, { type: "buffer" })
-      // console.log('work book: ', workBook)
       const workSheetName = workBook.SheetNames[0]
       const workSheet = workBook.Sheets[workSheetName]
       getTableKeys(workSheet)
-      const sheetData = XLSX.utils.sheet_to_json(workSheet)
-      setSheetData(sheetData)
-      addRowsToTable(sheetData)
+      const data = XLSX.utils.sheet_to_json(workSheet)
+      console.log('sheet data: ',data)
+      setSheetData(data)
+      addRowsToTable(data)
     }
   }
 
@@ -61,7 +61,6 @@ const Main = () => {
   }
 
   const validateSheet = () => {
-    console.log('path: ',PATH)
     setProblems([])
     sheetData.forEach((row, i) => {
       validateRow(row, i)
@@ -114,7 +113,6 @@ const Main = () => {
   const cleanString = str => str.replace(/^972|[+().]/g, '')
 
   const addRowToSql = async (rowObj, endpoint = '') => {
-    console.log('json stringy : ', JSON.stringify(rowObj))
     if (!endpoint) rowObj.rowNum = rowObj.__rowNum__+1
     await fetch(`${PATH}/${endpoint}`, {
       method: 'POST',
@@ -146,7 +144,6 @@ const Main = () => {
 
   const downloadFile = async () => {
     const newSheet = XLSX.utils.json_to_sheet(sheetData)
-    console.log('new sheet : ',newSheet)
     const newWorkBook = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(newWorkBook, newSheet, "mod sheet")
     XLSX.writeFile(newWorkBook, "fixed table.xlsx")
