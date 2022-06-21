@@ -153,11 +153,11 @@ const Main = () => {
     }
   }
 
-  const downloadFile = async () => {
-    const newSheet = XLSX.utils.json_to_sheet(sheetData)
+  const downloadFile = async (objArr, fileName) => {
+    const newSheet = XLSX.utils.json_to_sheet(objArr)
     const newWorkBook = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(newWorkBook, newSheet, "mod sheet")
-    XLSX.writeFile(newWorkBook, "fixed table.xlsx")
+    await XLSX.writeFile(newWorkBook, `${fileName}.xlsx`)
   }
 
   useEffect(() => {
@@ -187,6 +187,7 @@ const Main = () => {
     }
     {
       showProblems && <Problems
+        downloadFile={downloadFile}
         problems={problems}
         sheetData={sheetData}
         setProblems={setProblems}
