@@ -1,21 +1,12 @@
-ul {
-  display:  flex;
-}
 
-li {
-  display: flex;
-}
-
-button {
-  cursor: pointer;
-}
 
 button:disabled {
   cursor: not-allowed;
 }
 .main-container {
   text-align: center;
-  background-color: #ADEBBB;
+  background-color: #662E9B;
+  color: white;
   height: 100vh;
   width: 100%;
   z-index: 1;
