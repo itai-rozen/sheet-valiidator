@@ -13,23 +13,21 @@ const Modal = ({ setShowModal, validations, setValidations,tableKeys, validateSh
   }
 
 
-  useEffect(() => {
-  },[])
   return <div className="add-validation modal-container close">
     <div className="modal">
       <button className='close-btn' onClick={() => setShowModal(false)}>X</button>
     <h2>מפה את הקובץ</h2>
       <div className="field-input">
-      <button onClick={addValidation}>הוסף</button>
+      <button disabled={!validation || !field} onClick={addValidation}>הוסף</button>
 
-      <select name="validations" defaultValue={''} id="validations" onChange={e => setValidation(e.target.value)}>
+      <select name="validations" value={validation} id="validations" onChange={e => setValidation(e.target.value)}>
           <option   disabled value="" >בחר בדיקה לביצוע</option>
           <option value="email">email</option>
           <option value="טלפון">טלפון</option>
           <option value="תאים ריקים">תאים ריקים</option>
           <option value="כפילויות">כפילויות</option>
         </select>
-        <select defaultValue={''} className="table-keys-select" id="valids" onChange={e => setField(e.target.value)}>
+        <select value={field} className="table-keys-select" id="valids" onChange={e => setField(e.target.value)}>
           <option disabled  value="">בחר עמודה</option>
           {
             tableKeys.filter(key => key !== 'rowNum').map((tableKey,i) => {
