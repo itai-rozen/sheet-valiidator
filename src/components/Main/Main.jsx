@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import * as XLSX from 'xlsx'
 import Inputs from '../Inputs/Inputs'
+import Loader from '../Loader/Loader'
 import Modal from '../Modal/Modal'
 import Problems from '../Problems/Problems'
 import Validations from '../Validations/Validations'
@@ -15,10 +16,12 @@ const Main = () => {
   const [showProblemsStr, setShowProblemsStr] = useState(false)
   const [showProblems, setShowProblems] = useState(false)
   const [problems, setProblems] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const PATH = process.env.NODE_ENV === 'development' ?
     'http://localhost:9000/.netlify/functions/index' :
     'https://sheet-server.netlify.app/.netlify/functions/index'
   const uploadFile = e => {
+    setIsLoading(true)
     const file = e.target.files[0]
 
     const fileReader = new FileReader()
@@ -37,6 +40,7 @@ const Main = () => {
 
       // TODO save to localStorage every 10 mins
     }
+    setIsLoading(false)
   }
 
   const addRowsToTable = async rows => {
@@ -71,7 +75,6 @@ const Main = () => {
     })
     setShowModal(false)
     setShowProblemsStr(true)
-    console.log('sheet: ',sheetData)
   }
 
   const validateRow = (rowObj, index) => {
@@ -102,7 +105,6 @@ const Main = () => {
         const problemObj = { rowNum: rowObj.__rowNum__ + 1, problem: currValidation, value: currValue, field: value }
         console.log('problem object: ', problemObj)
         setProblems(prevArr => [...prevArr, problemObj])
-        // addRowToSql(problemObj, 'invalid')
       }
     }
 
@@ -159,7 +161,7 @@ const Main = () => {
   }
 
   useEffect(() => {
-    console.log('sheet: ',sheetData)
+    console.log('sheet: ', sheetData)
   }, [sheetData])
 
   return <div className="main-container">
@@ -177,26 +179,31 @@ const Main = () => {
     </div>
     {
       showProblemsStr && <div className='problem-msg-container'>
-        <h2>בקובץ קיימות <span style={{color:'yellow'}}>{problems.length}</span> שורות שגויות</h2>
+        <h2>
+          בקובץ קיימות
+          <span style={{ color: 'yellow' }}> {problems.length} </span> שורות שגויות מתוך {sheetData.length}</h2>
         <button onClick={() => setShowProblems(true)}>הצג</button>
       </div>
     }
     {
-      showProblems && <Problems 
-                        problems={problems} 
-                        sheetData={sheetData} 
-                        setProblems={setProblems}
-                        setShowProblems={setShowProblems}
-                        setSheetData={setSheetData} />
+      showProblems && <Problems
+        problems={problems}
+        sheetData={sheetData}
+        setProblems={setProblems}
+        setShowProblems={setShowProblems}
+        setSheetData={setSheetData} />
     }
     {
-    showModal && <Modal
-      setShowModal={setShowModal}
-      setValidations={setValidations}
-      tableKeys={tableKeys}
-      validations={validations}
-      validateSheet={validateSheet}
-    />
+      showModal && <Modal
+        setShowModal={setShowModal}
+        setValidations={setValidations}
+        tableKeys={tableKeys}
+        validations={validations}
+        validateSheet={validateSheet}
+      />
+    }
+    {
+      isLoading && <Loader />
     }
 
   </div>
