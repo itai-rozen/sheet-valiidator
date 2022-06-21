@@ -2,12 +2,13 @@ import React from 'react'
 import * as XLSX from 'xlsx'
 import './inputs.css'
 
-const Inputs = ({ downloadFile, uploadFile,tableKeys,setShowModal,validateSheet, validations }) => {
+const Inputs = ({ downloadFile,problems, uploadFile,tableKeys,setShowModal,validateSheet, validations }) => {
   return <div className="input-container">
      <input className='file-input' type="file" onChange={uploadFile} />
-      <button disabled={!tableKeys.length} onClick={() => setShowModal(true)}>add validations</button>
-      <button disabled={!tableKeys.length || !Object.keys(validations).length } onClick={validateSheet}>Validate</button>
-      <button onClick={() => downloadFile()}>Download</button>
+      <button disabled={!tableKeys.length || !Object.keys(validations).length } onClick={validateSheet}>בדוק</button>
+      <button disabled={!tableKeys.length} onClick={() => setShowModal(true)}>מפה את הקובץ</button>
+      <button disabled={(!tableKeys.length || problems.length > 0) || !validations.length}>טען רשימה</button>
+      {/* <button onClick={() => downloadFile()}>Download</button> */}
   </div>
 }
 
