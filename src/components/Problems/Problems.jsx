@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './problems.css'
 
-const Problems = ({ problems, setShowProblems, sheetData, setProblems, setSheetData }) => {
+const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProblems, setSheetData }) => {
   const [rowNumFix, setRowNumFix] = useState(-1)
   const [valueToFix,setValueToFix] = useState('')
 
@@ -9,7 +9,11 @@ const Problems = ({ problems, setShowProblems, sheetData, setProblems, setSheetD
     setSheetData(sheetData.filter(row => row.__rowNum__ !== rowNumber - 1))
     setProblems(problems.filter(row => row.rowNum !== rowNumber))
   }
-
+  const downloadProblems = () => {
+    const problemRowNums = problems.map(problem => problem.rowNum)
+    const problemItems =  sheetData.filter(item => (problemRowNums.includes(item.__rowNum__+1)))
+    downloadFile(problemItems,'problems')
+  }
   const editRow = problemObj => {
     setRowNumFix(problemObj.rowNum)
     setValueToFix(problemObj.value)
@@ -53,7 +57,7 @@ const Problems = ({ problems, setShowProblems, sheetData, setProblems, setSheetD
 
                 <p className="row-problem grow">
                   {
-                    (problem.rowNum === rowNumFix) ? <input defaultValue={valueToFix} onChange={e => setValueToFix(e.target.value)} /> : <>{problem.value}</>
+                    (problem.rowNum === rowNumFix) ? <input defaultValue={valueToFix} onChange={e => setValueToFix(e.target.value)} /> : <>{problem.value || <i><strong>(ריק)</strong></i>}</>
                   }
                 </p>
                 {(problem.rowNum === rowNumFix) ? <>
@@ -70,6 +74,7 @@ const Problems = ({ problems, setShowProblems, sheetData, setProblems, setSheetD
           })}
         </ul>
       </div>
+        <button disabled={!problems.length} onClick={downloadProblems}>Excel הורד שורות שגויות בקובץ </button>
     </div>
   </div>
 
