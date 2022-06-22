@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState,useRef, useEffect } from 'react'
 import './problems.css'
 
-const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProblems, setSheetData }) => {
+const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProblems, setSheetData, validateSheet }) => {
   const [rowNumFix, setRowNumFix] = useState(-1)
   const [valueToFix,setValueToFix] = useState('')
+  const inputEl = useRef(null)
 
   const deleteRow = rowNumber => {
     setSheetData(sheetData.filter(row => row.__rowNum__ !== rowNumber - 1))
@@ -17,6 +18,7 @@ const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProbl
   const editRow = problemObj => {
     setRowNumFix(problemObj.rowNum)
     setValueToFix(problemObj.value)
+    inputEl.current?.focus()
   }
 
   const saveChanges = (problemField) => {
@@ -32,9 +34,13 @@ const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProbl
     }))
     setRowNumFix(-1)
     setValueToFix('')
+    validateSheet()
   }
   const discardChanges = () => setRowNumFix(-1)
 
+  useEffect(() => {
+     (!problems.length) && setShowProblems(false)
+  },[rowNumFix])
   return <div className="modal-container">
     <div className="problems-container modal">
       <button className="close-btn" onClick={() => setShowProblems(false)}>X</button>
@@ -57,7 +63,7 @@ const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProbl
 
                 <p className="row-problem grow">
                   {
-                    (problem.rowNum === rowNumFix) ? <input defaultValue={valueToFix} onChange={e => setValueToFix(e.target.value)} /> : <>{problem.value || <i><strong>(ריק)</strong></i>}</>
+                    (problem.rowNum === rowNumFix) ? <input ref={inputEl} defaultValue={valueToFix} onChange={e => setValueToFix(e.target.value)} /> : <>{problem.value || <i><strong>(ריק)</strong></i>}</>
                   }
                 </p>
                 {(problem.rowNum === rowNumFix) ? <>
