@@ -4,8 +4,7 @@ import Inputs from '../Inputs/Inputs'
 import Loader from '../Loader/Loader'
 import Modal from '../Modal/Modal'
 import Problems from '../Problems/Problems'
-import Validations from '../Validations/Validations'
-
+import { saveToLocalStorage, loadFromLocalStorage, removeFromLocalStorage } from '../../localStorageService'
 import './main.css'
 
 const Main = () => {
@@ -20,6 +19,7 @@ const Main = () => {
   const PATH = process.env.NODE_ENV === 'development' ?
     'http://localhost:9000/.netlify/functions/index' :
     'https://sheet-server.netlify.app/.netlify/functions/index'
+
   const uploadFile = e => {
     setIsLoading(true)
     const file = e.target.files[0]
@@ -65,7 +65,6 @@ const Main = () => {
     }
     headers.unshift('rowNum')
     setTableKeys(headers)
-    // createSqlTable(headers)
   }
 
   const validateSheet = () => {
@@ -78,8 +77,6 @@ const Main = () => {
   }
 
   const validateRow = (rowObj, index) => {
-    console.log('validations: ', validations)
-    console.log('row: ', rowObj)
     for (const value in validations) {
       const currValidation = validations[value]
       const currValue = rowObj[value]
@@ -137,21 +134,6 @@ const Main = () => {
     });
   }
 
-  const createSqlTable = async tableHeaders => {
-    try {
-      await fetch(`${PATH}/create-table`, {
-        method: 'POST',
-        body: JSON.stringify(tableHeaders),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        }
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
 
   const downloadFile = async (objArr, fileName) => {
     const newSheet = XLSX.utils.json_to_sheet(objArr)
@@ -162,6 +144,7 @@ const Main = () => {
 
   useEffect(() => {
     console.log('sheet: ', sheetData)
+    sheetData.length && saveToLocalStorage(sheetData)
   }, [sheetData])
 
   return <div className="main-container">
