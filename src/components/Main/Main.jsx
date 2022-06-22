@@ -175,7 +175,8 @@ const Main = () => {
         sheetData={sheetData}
         setProblems={setProblems}
         setShowProblems={setShowProblems}
-        setSheetData={setSheetData} />
+        setSheetData={setSheetData}
+        validateSheet={validateSheet} />
     }
     {
       showModal && <Modal
