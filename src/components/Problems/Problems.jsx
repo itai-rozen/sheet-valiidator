@@ -26,9 +26,6 @@ const Problems = ({ downloadFile,
   const deleteRow = rowNumber => {
     setSheetData(sheetData.filter(row => row.__rowNum__ !== rowNumber - 1))
     setProblems(problems.filter(row => row.rowNum !== rowNumber))
-    setValueToFix('')
-    // force render
-    setRowNumFix(-1)
   }
 
   const onlyNumbers = val => val.match(/[0-9]/g)

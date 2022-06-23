@@ -77,6 +77,7 @@ const Main = () => {
   }
 
   const initialValidateSheet = () => {
+    console.log('yo initial: ',validations)
     setProblems([])
     let duplicateValues = []
     sheetData.forEach( (rowObj,i) => {
@@ -94,8 +95,8 @@ const Main = () => {
     })
   }
 
-  const validateSheet = (initial = false) => {
-    if (initial || !validations.length) initialValidateSheet()
+  const validateSheet = () => {
+    if (!Object.keys(validations).length ) initialValidateSheet()
     else sheetData.forEach((row, i) => { validateRow(row, i)})
     setShowModal(false)
     setShowProblemsStr(true)
@@ -177,7 +178,7 @@ const Main = () => {
   }, [sheetData])
 
   useEffect(() => {
-   if (phoneHeader) validateSheet(true)
+   if (phoneHeader) validateSheet()
   }, [phoneHeader])
 
   return <div className="main-container">
