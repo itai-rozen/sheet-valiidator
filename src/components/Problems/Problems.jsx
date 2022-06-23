@@ -4,7 +4,6 @@ import './problems.css'
 const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProblems, setSheetData, validateSheet }) => {
   const [rowNumFix, setRowNumFix] = useState(-1)
   const [valueToFix,setValueToFix] = useState('')
-  const inputEl = useRef(null)
 
   const deleteRow = rowNumber => {
     setSheetData(sheetData.filter(row => row.__rowNum__ !== rowNumber - 1))
@@ -18,7 +17,6 @@ const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProbl
   const editRow = problemObj => {
     setRowNumFix(problemObj.rowNum)
     setValueToFix(problemObj.value)
-    inputEl.current?.focus()
   }
 
   const saveChanges = (problemField) => {
@@ -63,7 +61,7 @@ const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProbl
 
                 <p className="row-problem grow">
                   {
-                    (problem.rowNum === rowNumFix) ? <input ref={inputEl} defaultValue={valueToFix} onChange={e => setValueToFix(e.target.value)} /> : <>{problem.value || <i><strong>(ריק)</strong></i>}</>
+                    (problem.rowNum === rowNumFix) ? <input  defaultValue={valueToFix} onChange={e => setValueToFix(e.target.value)} /> : <>{problem.value || <i><strong>(ריק)</strong></i>}</>
                   }
                 </p>
                 {(problem.rowNum === rowNumFix) ? <>
