@@ -17,6 +17,7 @@ const Main = () => {
   const [problems, setProblems] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [phoneHeader, setPhoneHeader] = useState('')
+  const [validData, setValidData] = useState([])
   const PATH = process.env.NODE_ENV === 'development' ?
     'http://localhost:9000/.netlify/functions/index' :
     'https://sheet-server.netlify.app/.netlify/functions/index'
@@ -50,7 +51,6 @@ const Main = () => {
       setSheetData([])
       return
     }
-    // validateSheet()
   }
 
   const getPhoneColIdx = () => {
@@ -66,15 +66,6 @@ const Main = () => {
     return null
   }
 
-  const addRowsToTable = async rows => {
-    for (const row of rows) {
-      try {
-        await addRowToSql(row)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-  }
 
   const getTableKeys = ws => {
     const rangeCells = XLSX.utils.decode_range(ws['!ref'])
@@ -99,15 +90,13 @@ const Main = () => {
         addProblem(rowObj.__rowNum__, 'טלפון', phoneNumber, phoneHeader)
         return
       }
-      if (!validateDuplicateCells(phoneNumber)){
-        if (duplicateValues.includes(phoneNumber)) return
+      if (!validateDuplicateCells(phoneNumber) && !duplicateValues.includes(phoneNumber)){
         addProblem(rowObj.__rowNum__, 'כפילויות', phoneNumber, phoneHeader)
         duplicateValues.push(phoneNumber)
         return
-      }      
+      }
+      setValidData([...validData, rowObj])      
     })
-    setShowModal(false)
-    setShowProblemsStr(true)
   }
 
   const validateSheet = (initial = false) => {
@@ -203,6 +192,7 @@ const Main = () => {
       tableKeys={tableKeys}
       problems={problems}
       setShowModal={setShowModal}
+      validData={validData}
       validations={validations}
       validateSheet={validateSheet} />
 
