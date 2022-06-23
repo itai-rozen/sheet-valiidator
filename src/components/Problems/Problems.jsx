@@ -12,7 +12,7 @@ const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProbl
   const downloadProblems = () => {
     const problemRowNums = problems.map(problem => problem.rowNum)
     const problemItems =  sheetData.filter(item => (problemRowNums.includes(item.__rowNum__+1)))
-    downloadFile(problemItems,'problems')
+    downloadFile(problemItems,'invites_problems')
   }
   const editRow = problemObj => {
     setRowNumFix(problemObj.rowNum)
