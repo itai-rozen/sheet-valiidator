@@ -16,6 +16,7 @@ const Main = () => {
   const [showProblems, setShowProblems] = useState(false)
   const [problems, setProblems] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [phoneHeader, setPhoneHeader] = useState('')
   const PATH = process.env.NODE_ENV === 'development' ?
     'http://localhost:9000/.netlify/functions/index' :
     'https://sheet-server.netlify.app/.netlify/functions/index'
@@ -23,7 +24,6 @@ const Main = () => {
   const uploadFile = e => {
     setIsLoading(true)
     const file = e.target.files[0]
-
     const fileReader = new FileReader()
     fileReader.readAsArrayBuffer(file)
 
@@ -34,13 +34,36 @@ const Main = () => {
       const workSheet = workBook.Sheets[workSheetName]
       getTableKeys(workSheet)
       const data = XLSX.utils.sheet_to_json(workSheet)
-      // console.log('sheet data: ',data)
       setSheetData(data)
-      // addRowsToTable(data)
-
-      // TODO save to localStorage every 10 mins
     }
     setIsLoading(false)
+  }
+
+  const updatePhoneValidation = () => {
+    const phoneColHeader = getPhoneColIdx()
+    setPhoneHeader(phoneColHeader)
+    console.log('table keys: ',tableKeys)
+    if (phoneColHeader){
+      setValidations({...validations, [phoneColHeader] : 'טלפון'})
+    } else {
+      alert('הקובץ לא מכיל שדה תקין של מספרי טלפון. טען קובץ חדש.')
+      setSheetData([])
+      return
+    }
+    // validateSheet()
+  }
+
+  const getPhoneColIdx = () => {
+    console.log('sheet: ',sheetData)
+    for (let i = 0; i  < sheetData.length; i++){
+      const row = sheetData[i]
+      for (const field in row){
+        console.log('field: ',field)
+        console.log('row[field]: ',row[field])
+        if (validatePhone(row[field])) return field
+      }
+    }
+    return null
   }
 
   const addRowsToTable = async rows => {
@@ -67,17 +90,37 @@ const Main = () => {
     setTableKeys(headers)
   }
 
-  const validateSheet = () => {
+  const initialValidateSheet = () => {
     setProblems([])
-    sheetData.forEach((row, i) => {
-      validateRow(row, i)
+    let duplicateValues = []
+    sheetData.forEach((rowObj,i) => {
+      const phoneNumber = rowObj[phoneHeader]
+      if (!validatePhone(phoneNumber)) {
+        addProblem(rowObj.__rowNum__, 'טלפון', phoneNumber, phoneHeader)
+        return
+      }
+      if (!validateDuplicateCells(phoneNumber)){
+        if (duplicateValues.includes(phoneNumber)) return
+        addProblem(rowObj.__rowNum__, 'כפילויות', phoneNumber, phoneHeader)
+        duplicateValues.push(phoneNumber)
+        return
+      }      
     })
     setShowModal(false)
     setShowProblemsStr(true)
   }
 
+  const validateSheet = (initial = false) => {
+    if (initial) initialValidateSheet()
+    else sheetData.forEach((row, i) => { validateRow(row, i)})
+    setShowModal(false)
+    setShowProblemsStr(true)
+  }
+
   const validateRow = (rowObj, index) => {
+    console.log('validations: ',validations)
     for (const value in validations) {
+
       const currValidation = validations[value]
       const currValue = rowObj[value]
       let validationFunc
@@ -98,27 +141,28 @@ const Main = () => {
           validationFunc = console.log
           break;
       }
-      if (!validationFunc(currValue + '', index, value)) {
-        const problemObj = { rowNum: rowObj.__rowNum__ + 1, problem: currValidation, value: currValue, field: value }
-        console.log('problem object: ', problemObj)
-        setProblems(prevArr => [...prevArr, problemObj])
-      }
+        if (!validationFunc(currValue + '', index, value))  addProblem(rowObj.__rowNum__, currValidation,currValue,value)
     }
-
   }
 
-  const validateEmail = (str, _, _2) => str.match(/^\S+@\S+\.\S+$/)
+  const addProblem = (rowNum,validationType, value, field) => {
+    const problemObj = { rowNum: rowNum + 1, problem: validationType, value: value, field: field }
+    console.log('problem object: ', problemObj)
+    setProblems(prevArr => [...prevArr, problemObj])
+  }
 
-  const validatePhone = (str, _, _2) => {
+  const validateEmail = (str, _ = '', _2 = '') => str.match(/^\S+@\S+\.\S+$/)
+
+  const validatePhone = (str, _ = '', _2 = '') => {
     const cleanStr = cleanString(str)
     return cleanStr.match(/^05[0-9]{8}$|^5[0-9]{8}$/)
   }
 
-  const validateFullCells = (str, _, _2) => str.trim() !== 'undefined'
+  const validateFullCells = (str, _ = '', _2 = '') => (str+'').trim() !== 'undefined'
 
-  const validateDuplicateCells = (str, i, col) => !sheetData.find((row, index) => (row[col] === str && i !== index))
+  const validateDuplicateCells = (str, i, col) => sheetData.find((row, index) => (str && row[col] === str && i !== index ))
 
-  const cleanString = str => str.replace(/^972|[+().]/g, '')
+  const cleanString = str => (str+'').replace(/^972|[+().]/g, '')
 
   const addRowToSql = async (rowObj, endpoint = '') => {
     if (!endpoint) rowObj.rowNum = rowObj.__rowNum__ + 1
@@ -143,9 +187,13 @@ const Main = () => {
   }
 
   useEffect(() => {
-    console.log('sheet: ', sheetData)
     sheetData.length && saveToLocalStorage(sheetData)
+    if (sheetData.length && !validations['טלפון']) updatePhoneValidation()
   }, [sheetData])
+
+  useEffect(() => {
+   if (Object.values(validations).includes('טלפון') && phoneHeader) validateSheet(true)
+  }, [phoneHeader])
 
   return <div className="main-container">
     <h1>רשימת תפוצה</h1>
