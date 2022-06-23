@@ -1,44 +1,63 @@
-import React, { useState,useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import './problems.css'
 
-const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProblems, setSheetData, validateSheet }) => {
+const Problems = ({ downloadFile, 
+                    problems, 
+                    setShowProblems, 
+                    sheetData, 
+                    setProblems, 
+                    setSheetData, 
+                    validateSheet }) => {
   const [rowNumFix, setRowNumFix] = useState(-1)
   const [valueToFix,setValueToFix] = useState('')
 
-  const deleteRow = rowNumber => {
-    setSheetData(sheetData.filter(row => row.__rowNum__ !== rowNumber - 1))
-    setProblems(problems.filter(row => row.rowNum !== rowNumber))
-  }
+
   const downloadProblems = () => {
     const problemRowNums = problems.map(problem => problem.rowNum)
     const problemItems =  sheetData.filter(item => (problemRowNums.includes(item.__rowNum__+1)))
     downloadFile(problemItems,'invites_problems')
   }
+
   const editRow = problemObj => {
     setRowNumFix(problemObj.rowNum)
     setValueToFix(problemObj.value)
   }
 
+  const deleteRow = rowNumber => {
+    setSheetData(sheetData.filter(row => row.__rowNum__ !== rowNumber - 1))
+    setProblems(problems.filter(row => row.rowNum !== rowNumber))
+    setValueToFix('')
+    // force render
+    setRowNumFix(-1)
+  }
+
+  const onlyNumbers = val => val.match(/[0-9]/g)
+
   const saveChanges = (problemField) => {
-    console.log('problem field: ',problemField)
+    
+    setSheetData(sheetData.map(dataItem => {
+      if (dataItem.__rowNum__ === rowNumFix - 1) dataItem[problemField] = onlyNumbers(valueToFix) ? +valueToFix : valueToFix
+      return dataItem
+    }))
     setProblems(problems.map(problem => {
       if (problem.rowNum === rowNumFix) problem.value = valueToFix
       return problem
-    }))
-    setSheetData(sheetData.map(dataItem => {
-      console.log('data field: ',dataItem[problemField])
-      if (dataItem.__rowNum__ === rowNumFix - 1) dataItem[problemField] = valueToFix
-      return dataItem
     }))
     setRowNumFix(-1)
     setValueToFix('')
     validateSheet()
   }
-  const discardChanges = () => setRowNumFix(-1)
+
+  const discardChanges = () => {
+    setRowNumFix(-1)
+    setValueToFix('')
+  } 
 
   useEffect(() => {
      (!problems.length) && setShowProblems(false)
-  },[rowNumFix])
+  },[rowNumFix,problems])
+
+
   return <div className="modal-container">
     <div className="problems-container modal">
       <button className="close-btn" onClick={() => setShowProblems(false)}>X</button>
@@ -58,17 +77,20 @@ const Problems = ({ downloadFile, problems, setShowProblems, sheetData, setProbl
               <div className="problem-container">
                 <p className="row-number">{problem.rowNum}</p>
                 <p className="row-problem">{problem.problem}</p>
-
                 <p className="row-problem grow">
                   {
-                    (problem.rowNum === rowNumFix) ? <input  defaultValue={valueToFix} onChange={e => setValueToFix(e.target.value)} /> : <>{problem.value || <i><strong>(ריק)</strong></i>}</>
+                    (problem.rowNum === rowNumFix) ? 
+                      <input  defaultValue={valueToFix} onChange={e => setValueToFix(e.target.value)} /> : 
+                      <>{problem.value || <i><strong>(ריק)</strong></i>}</>
                   }
                 </p>
-                {(problem.rowNum === rowNumFix) ? <>
+                {(problem.rowNum === rowNumFix) ? 
+                  <>
                     <p className="change-row no-under" onClick={() => saveChanges(problem.field)}>✔️</p>
                     <p className="change-row no-under" onClick={discardChanges}>❌</p>
-                </>
-                  : <>
+                  </>
+                  : 
+                  <>
                     <p className='change-row' onClick={() => editRow(problem)}>תקן</p>
                     <p className='change-row' onClick={() => deleteRow(problem.rowNum)}>מחק</p>
                   </>

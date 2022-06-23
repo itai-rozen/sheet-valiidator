@@ -43,10 +43,7 @@ const Main = () => {
   const updatePhoneValidation = () => {
     const phoneColHeader = getPhoneColIdx()
     setPhoneHeader(phoneColHeader)
-    console.log('table keys: ',tableKeys)
-    if (phoneColHeader){
-      setValidations({...validations, [phoneColHeader] : 'טלפון'})
-    } else {
+    if (!phoneColHeader){
       alert('הקובץ לא מכיל שדה תקין של מספרי טלפון. טען קובץ חדש.')
       setSheetData([])
       return
@@ -58,8 +55,6 @@ const Main = () => {
     for (let i = 0; i  < sheetData.length; i++){
       const row = sheetData[i]
       for (const field in row){
-        console.log('field: ',field)
-        console.log('row[field]: ',row[field])
         if (validatePhone(row[field])) return field
       }
     }
@@ -84,13 +79,13 @@ const Main = () => {
   const initialValidateSheet = () => {
     setProblems([])
     let duplicateValues = []
-    sheetData.forEach((rowObj,i) => {
+    sheetData.forEach( (rowObj,i) => {
       const phoneNumber = rowObj[phoneHeader]
       if (!validatePhone(phoneNumber)) {
         addProblem(rowObj.__rowNum__, 'טלפון', phoneNumber, phoneHeader)
         return
       }
-      if (!validateDuplicateCells(phoneNumber) && !duplicateValues.includes(phoneNumber)){
+      if (validateDuplicateCells(phoneNumber,i,phoneHeader) && !duplicateValues.includes(phoneNumber)){
         addProblem(rowObj.__rowNum__, 'כפילויות', phoneNumber, phoneHeader)
         duplicateValues.push(phoneNumber)
         return
@@ -100,7 +95,7 @@ const Main = () => {
   }
 
   const validateSheet = (initial = false) => {
-    if (initial) initialValidateSheet()
+    if (initial || !validations.length) initialValidateSheet()
     else sheetData.forEach((row, i) => { validateRow(row, i)})
     setShowModal(false)
     setShowProblemsStr(true)
@@ -176,12 +171,13 @@ const Main = () => {
   }
 
   useEffect(() => {
+    console.log('sheet: ',sheetData)  
     sheetData.length && saveToLocalStorage(sheetData)
-    if (sheetData.length && !validations['טלפון']) updatePhoneValidation()
+    if (sheetData.length && !phoneHeader) updatePhoneValidation()
   }, [sheetData])
 
   useEffect(() => {
-   if (Object.values(validations).includes('טלפון') && phoneHeader) validateSheet(true)
+   if (phoneHeader) validateSheet(true)
   }, [phoneHeader])
 
   return <div className="main-container">
@@ -203,7 +199,7 @@ const Main = () => {
         <h2>
           בקובץ קיימות
           <span style={{ color: 'yellow' }}> {problems.length} </span> שורות שגויות מתוך {sheetData.length}</h2>
-        <button onClick={() => setShowProblems(true)}>הצג</button>
+        <button disabled={!problems.length} onClick={() => setShowProblems(true)}>הצג</button>
       </div>
     }
     {
