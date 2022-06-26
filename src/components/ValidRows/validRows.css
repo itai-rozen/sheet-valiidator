@@ -2,5 +2,13 @@
   display: flex;
   justify-content: space-evenly;
   width: 100%;
-  text-align: right;
+  flex-wrap: nowrap;
+  text-align: center;
+}
+.data-item {
+  width: 20%;
+}
+.rows-list {
+  display: flex;
+  flex-direction: column;
 }
