@@ -85,6 +85,7 @@ const Main = () => {
 
   const initialValidateSheet = () => {
     setProblems([])
+    setValidData([])
     let duplicateValues = []
     sheetData.forEach((rowObj, i) => {
       const phoneNumber = rowObj[sqlHeaders.target_phone]
@@ -97,7 +98,10 @@ const Main = () => {
         duplicateValues.push(phoneNumber)
         return
       }
-      setValidData([...validData, rowObj])
+      tableKeys.forEach(tableKey => {
+        if (!rowObj[tableKey]) rowObj[tableKey] = ''
+      })
+      setValidData(prev => [...prev, rowObj])
     })
   }
 
@@ -178,6 +182,7 @@ const Main = () => {
 
   useEffect(() => {
     console.log('sheet: ', sheetData)
+    console.log('valid data: ',validData)
     sheetData.length && saveToLocalStorage(sheetData)
     if (sheetData.length && !sqlHeaders.target_phone) updatePhoneValidation()
   }, [sheetData])
