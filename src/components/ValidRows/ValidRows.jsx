@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import './validRows.css'
 
-const ValidRows = ({ validData, sqlHeaders, setSqlHeaders }) => {
+const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
   const sqlHeaderMap = {
     target_phone: 'טלפון',
     target_name: 'שם',
     aff: 'קרבה',
     notes: 'הערות',
-    inviter: 'מזמין',
+    modifier: 'מזמין',
     email: 'E-mail'
   }
   const getHeader = header => Object.keys(sqlHeaders)[getHeaderIdx(header)]
@@ -15,11 +15,14 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders }) => {
 
   useEffect(() => {
     console.log('sql headers:', sqlHeaders)
+    console.log('table keys: ', tableKeys)
   }, [sqlHeaders])
   return <div className="valid-rows-container">
     <ul className="header-list valid-list">
       {
-        Object.keys(validData[0]).reverse().map((header, i) =>
+        Object.keys(validData[0]).reverse()
+        .filter(header => header !== 'rowNum')
+        .map((header, i) =>
           <li key={header + i} className='row-header'>
 
             {
@@ -54,8 +57,21 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders }) => {
       {
         validData.map((validRow, i) => {
           return <li key={i} className='row-item'>
-            {Object.values(validRow).reverse()
-              .map((validItem, i) => <p key={validItem + i} className='data-item'>{validItem}</p>)}
+            {
+              tableKeys
+              .filter(tableKey => tableKey !== 'rowNum')
+              .reverse()
+              .map((tableKey,i) => {
+               return <p key={tableKey+i} className='data-item'>{validRow[tableKey]}</p> 
+              })
+              // Object.values(validRow).reverse()
+              //   .map((validItem, j) => {
+              //     return (validItem) ?
+              //       <p key={validItem + j} className='data-item'>{validItem}</p> :
+              //       <p key={validItem + j} className='data-item'></p>
+
+              //   })
+            }
           </li>
         })
       }
