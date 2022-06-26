@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './validRows.css'
 
 const ValidRows = ({ validData, sqlHeaders, setSqlHeaders }) => {
   const sqlHeaderMap = {
+    target_phone: 'טלפון',
     target_name: 'שם',
     aff: 'קרבה',
     notes: 'הערות',
@@ -12,27 +13,39 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders }) => {
   const getHeader = header => Object.keys(sqlHeaders)[getHeaderIdx(header)]
   const getHeaderIdx = headerStr => Object.values(sqlHeaders).findIndex(headerVal => headerVal === headerStr)
 
-
+  useEffect(() => {
+    console.log('sql headers:', sqlHeaders)
+  }, [sqlHeaders])
   return <div className="valid-rows-container">
     <ul className="header-list valid-list">
       {
         Object.keys(validData[0]).reverse().map((header, i) =>
           <li key={header + i} className='row-header'>
-              {
-                (getHeader(header) === 'target_phone') ? 
-                <p>טלפון</p>:
-            <select name="" id="" defaultValue='' onChange={e => setSqlHeaders({...sqlHeaders, [e.target.value]: header})} >
-                <>
-                <option disabled value=''>שייך שדה</option>
-                {
-                  Object.keys(sqlHeaders)
-                  .filter(sqlHeader => sqlHeader !== 'target_phone').map(sqlHeader => {
-                    return <option key={sqlHeader} disabled={sqlHeaders[sqlHeader]} value={sqlHeader}>{sqlHeaderMap[sqlHeader]}</option>
-                  })
-                }
-                </>
-            </select>
-              }
+
+            {
+              (getHeader(header)) ?
+                <p>{sqlHeaderMap[getHeader(header)]}
+                  {getHeader(header) === 'target_phone' ||
+                    <span onClick={() => setSqlHeaders({ ...sqlHeaders, [getHeader(header)]: '' })}>❌</span>
+                  }
+                </p> :
+                <select name="" id="" defaultValue='' onChange={e => setSqlHeaders({ ...sqlHeaders, [e.target.value]: header })} >
+                  <>
+                    <option disabled value=''>שייך שדה</option>
+                    {
+                      Object.keys(sqlHeaders)
+                        .filter(sqlHeader => sqlHeader !== 'target_phone').map(sqlHeader => {
+                          return <option key={sqlHeader}
+                            disabled={sqlHeaders[sqlHeader]}
+                            value={sqlHeader}>
+                            {sqlHeaderMap[sqlHeader]}
+                          </option>
+                        })
+
+                    }
+                  </>
+                </select>
+            }
           </li>
         )
       }
@@ -41,7 +54,8 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders }) => {
       {
         validData.map((validRow, i) => {
           return <li key={i} className='row-item'>
-            {Object.values(validRow).reverse().map((validItem,i) => <p key={validItem+i} className='data-item'>{validItem}</p>)}
+            {Object.values(validRow).reverse()
+              .map((validItem, i) => <p key={validItem + i} className='data-item'>{validItem}</p>)}
           </li>
         })
       }
