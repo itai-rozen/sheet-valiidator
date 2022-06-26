@@ -19,7 +19,7 @@ const Main = () => {
   const [problems, setProblems] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [sqlHeaders, setSqlHeaders] = useState({
-    target_phone: '', target_name: '', aff: '', notes: '', inviter: '', email: ''
+    target_phone: '', target_name: '', aff: '', notes: '', modifier: '', email: ''
   })
   const [validData, setValidData] = useState([])
   const PATH = process.env.NODE_ENV === 'development' ?
@@ -140,6 +140,7 @@ const Main = () => {
     }
     return ''
   }
+  const getHash = () => Math.random().toString(36).substring(5);
   const uploadToServer = () => {
     let sqlStr = {}
     validData.forEach(validRowObj => {
@@ -150,6 +151,8 @@ const Main = () => {
       sqlStr.isactive = 0
       sqlStr.isDick = 0
       sqlStr.event_hash = event_hash
+      sqlStr.hash = getHash()
+
       addRowToSql(sqlStr)
     })
   }
@@ -232,6 +235,7 @@ const Main = () => {
         validData={validData}
         sqlHeaders={sqlHeaders}
         setSqlHeaders={setSqlHeaders}
+        tableKeys={tableKeys}
       />
     }
     {
