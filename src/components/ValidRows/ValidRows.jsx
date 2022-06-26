@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import './validRows.css'
 
 const ValidRows = ({ validData, sqlHeaders, setSqlHeaders }) => {
@@ -12,9 +12,7 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders }) => {
   const getHeader = header => Object.keys(sqlHeaders)[getHeaderIdx(header)]
   const getHeaderIdx = headerStr => Object.values(sqlHeaders).findIndex(headerVal => headerVal === headerStr)
 
-  useEffect(() => {
-    console.log('sql headers:', sqlHeaders)
-  }, [sqlHeaders])
+
   return <div className="valid-rows-container">
     <ul className="header-list valid-list">
       {
