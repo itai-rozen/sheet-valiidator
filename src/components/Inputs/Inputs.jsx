@@ -30,7 +30,7 @@ const Inputs = ({
     </label>
     {/* <button disabled={!tableKeys.length || !Object.keys(validations).length } onClick={validateSheet}>בדוק</button> */}
     {/* <button disabled={!tableKeys.length} onClick={() => setShowModal(true)}>מפה את הקובץ</button> */}
-    <button disabled={!validData.length || !sqlHeaders.target_name} onClick={uploadToServer}>טען שורות תקינות</button>
+    <button className='upload-btn' disabled={!validData.length || !sqlHeaders.target_name} onClick={uploadToServer}>טען שורות תקינות</button>
     <button disabled={!validData.length} onClick={() => downloadFile(validData, 'invites_valids')}>הורד שורות תקינות</button>
   </div>
 }
