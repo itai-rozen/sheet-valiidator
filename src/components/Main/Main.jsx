@@ -3,9 +3,8 @@ import { useParams } from 'react-router-dom'
 import * as XLSX from 'xlsx'
 import Inputs from '../Inputs/Inputs'
 import Loader from '../Loader/Loader'
-import Modal from '../Modal/Modal'
 import Problems from '../Problems/Problems'
-import { saveToLocalStorage, loadFromLocalStorage, removeFromLocalStorage } from '../../localStorageService'
+import { saveToLocalStorage } from '../../localStorageService'
 import './main.css'
 import ValidRows from '../ValidRows/ValidRows'
 
@@ -106,12 +105,8 @@ const Main = () => {
   }
 
   const validateSheet = () => {
-    // if (!Object.keys(validations).length ) 
     initialValidateSheet()
-    // else sheetData.forEach((row, i) => { validateRow(row, i)})
-    // setShowModal(false)
     setShowProblemsStr(true)
-
   }
 
 
@@ -155,6 +150,7 @@ const Main = () => {
 
       addRowToSql(sqlStr)
     })
+    // removeFromLocalStorage()
   }
   const addRowToSql = async (rowObj, endpoint = '') => {
     try {
@@ -183,15 +179,16 @@ const Main = () => {
     await XLSX.writeFile(newWorkBook, `${fileName}.xlsx`)
   }
 
+
   useEffect(() => {
-    console.log('sheet: ', sheetData)
-    console.log('valid data: ',validData)
     sheetData.length && saveToLocalStorage(sheetData)
     if (sheetData.length && !sqlHeaders.target_phone) updatePhoneValidation()
+       // eslint-disable-next-line
   }, [sheetData])
 
   useEffect(() => {
     if (sqlHeaders.target_phone) validateSheet()
+       // eslint-disable-next-line
   }, [sqlHeaders.target_phone])
 
   return <div className="main-container">

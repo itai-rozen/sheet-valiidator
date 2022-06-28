@@ -14,64 +14,62 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
   const getHeaderIdx = headerStr => Object.values(sqlHeaders).findIndex(headerVal => headerVal === headerStr)
 
   useEffect(() => {
-    console.log('sql headers:', sqlHeaders)
-    console.log('table keys: ', tableKeys)
+       // eslint-disable-next-line
   }, [sqlHeaders])
-  return <div className="valid-rows-container">
-    <ul className="header-list valid-list">
-      {
-        Object.keys(validData[0]).reverse()
-        .filter(header => header !== 'rowNum')
-        .map((header, i) =>
-          <li key={header + i} className='header-item'>
 
+  return <div className="valid-rows-container">
+    <ul className="valid-list">
+      <li className="header-item">
+        {
+          Object.keys(validData[0]).reverse()
+            .filter(header => header !== 'rowNum')
+            .map((header, i) =>
             {
-              (getHeader(header)) ?
+              return (getHeader(header)) ?
                 <p className='data-item'>{sqlHeaderMap[getHeader(header)]}
                   {
-                  getHeader(header) === 'target_phone' ||
+                    getHeader(header) === 'target_phone' ||
                     <span onClick={() => setSqlHeaders({ ...sqlHeaders, [getHeader(header)]: '' })}>❌</span>
                   }
                 </p> :
                 <p className='data-item'>
-                <select name="" id="" defaultValue='' onChange={e => setSqlHeaders({ ...sqlHeaders, [e.target.value]: header })} >
-                  <>
-                    <option disabled value=''>שייך שדה</option>
-                    {
-                      Object.keys(sqlHeaders)
-                        .filter(sqlHeader => sqlHeader !== 'target_phone').map(sqlHeader => {
-                          return <option key={sqlHeader}
-                            disabled={sqlHeaders[sqlHeader]}
-                            value={sqlHeader}>
-                            {sqlHeaderMap[sqlHeader]}
-                          </option>
-                        })
+                  <select name="" id="" defaultValue='' onChange={e => setSqlHeaders({ ...sqlHeaders, [e.target.value]: header })} >
+                    <>
+                      <option disabled value=''>שייך שדה</option>
+                      {
+                        Object.keys(sqlHeaders)
+                          .filter(sqlHeader => sqlHeader !== 'target_phone').map(sqlHeader => {
+                            return <option key={sqlHeader}
+                              disabled={sqlHeaders[sqlHeader]}
+                              value={sqlHeader}>
+                              {sqlHeaderMap[sqlHeader]}
+                            </option>
+                          })
 
-                    }
-                  </>
-                </select>
+                      }
+                    </>
+                  </select>
                 </p>
             }
-          </li>
-        )
-      }
-    </ul>
-    <ul className="rows-list valid-list">
-      {
-        validData.map((validRow, i) => {
-          return <li key={i} className='row-item'>
-            {
-              tableKeys
-              .filter(tableKey => tableKey !== 'rowNum')
-              .reverse()
-              .map((tableKey,i) => {
-               return <p key={tableKey+i} className='data-item'>{validRow[tableKey]}</p> 
-              })
+            )
+        }
+      </li>
 
-            }
-          </li>
-        })
-      }
+        {
+          validData.map((validRow, i) => {
+            return <li key={i} className='row-item'>
+              {
+                tableKeys
+                  .filter(tableKey => tableKey !== 'rowNum')
+                  .reverse()
+                  .map((tableKey, i) => {
+                    return <p key={tableKey + i} className='data-item'>{validRow[tableKey]}</p>
+                  })
+
+              }
+            </li>
+          })
+        }
     </ul>
   </div>
 }

@@ -52,6 +52,7 @@ const Problems = ({ downloadFile,
 
   useEffect(() => {
      (!problems.length) && setShowProblems(false)
+        // eslint-disable-next-line
   },[rowNumFix,problems])
 
 
