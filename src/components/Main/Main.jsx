@@ -23,8 +23,8 @@ const Main = () => {
   })
   const [validData, setValidData] = useState([])
   const PATH = process.env.NODE_ENV === 'development' ?
-    'http://localhost:9000/.netlify/functions/index' :
-    'https://sheet-server.netlify.app/.netlify/functions/index'
+    'http://localhost:3001/' :
+    'sheet-validator-server.eu-west-1.elasticbeanstalk.com'
 
   const { event_hash } = useParams()
 
@@ -215,7 +215,8 @@ const Main = () => {
       showProblemsStr && <div className='problem-msg-container'>
         <h2>
           בקובץ קיימות
-          <span style={{ color: 'yellow' }}> {problems.length} </span> שורות שגויות מתוך {sheetData.length}</h2>
+          <span style={{ color: 'yellow' }}> {problems.length} </span> שורות שגויות מתוך {sheetData.length}
+          </h2>
         <button disabled={!problems.length} onClick={() => setShowProblems(true)}>הצג</button>
       </div>
     }
