@@ -4,6 +4,9 @@
   border-radius: 6px;
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  background-color: rgba(241, 156, 110, 0.5);
+  background:url('/public/lights.jpg') no-repeat center center/cover;
   /* flex-wrap: wrap; */
 }
 
@@ -12,8 +15,26 @@
   padding: 10px 20px;
 }
 
-.input-container button,  .file-input {
-  display: inline-block;
+.input-container button {
   margin: 10px 15px;
   border-radius: 12px;
+}
+.file-input {
+  display: none;
+}
+
+.button-like { cursor: pointer;}
+
+
+@media screen and (max-width:600px) {
+  
+  .input-container  {
+    justify-content: space-between;
+  }
+  .input-container > * , .input-container button{
+    font-size: 1rem;
+    padding: 5px 10px;
+    margin: 2px 4px;
+  }
+  
 }

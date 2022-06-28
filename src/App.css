@@ -1,7 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&family=Shadows+Into+Light&display=swap');
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family:  'Rubik', sans-serif;
+}
+
+.App {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
 }
 
 ul {
@@ -19,6 +28,7 @@ button {
   padding: 10px 12px;
   border-radius: 12px;
   background-color: white;
+  direction: rtl;
 }
 
 .modal-container {
@@ -48,6 +58,4 @@ button {
   position: absolute;
   top: 0;
   left: 0;
-
-
 } 

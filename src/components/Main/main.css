@@ -5,18 +5,20 @@ button:disabled {
 }
 .main-container {
   text-align: center;
-  background-color: #662E9B;
   color: white;
-  height: 100vh;
-  width: 100%;
-  z-index: 1;
-  position: absolute;
+
+  /* z-index: 1; */
+  /* position: absolute; */
   margin: 0;
   padding: 0;
+  background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+  height: 100vh;
+  width: 100vw;
 }
 
 h1, h2 {
-  margin: 5px;
+  margin: 0px;
+  color: #131313;
 }
 
 ul {
@@ -29,5 +31,17 @@ ul {
   display: flex;
   width: 100%;
   justify-content: space-around;
+}
+
+@media screen and (max-width:600px) {
+  h1 {
+    font-size: 1rem;
+  }
+  .problem-msg-container > * {
+    font-size: 1rem;
+  }
+  .problem-msg-container button {
+    font-size: 0.8rem;
+  }
 }
 

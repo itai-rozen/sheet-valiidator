@@ -1,14 +1,36 @@
+.valid-rows-container {
+  color: black;
+  height: 70%;
+  width: 95%;
+  margin: 0 auto;
+  overflow: auto;
+
+}
 .row-item {
   display: flex;
-  justify-content: space-evenly;
-  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  width: 95%;
+  margin: 0 auto;
   flex-wrap: nowrap;
-  text-align: center;
 }
-.data-item {
+.row-item p {
+  text-align: right;
+}
+.data-item, .header-item {
   width: 15%;
 }
 .rows-list {
   display: flex;
   flex-direction: column;
+}
+
+.header-list {
+    margin-bottom: 15px;
+}
+
+@media screen and (max-width:600px) {
+  .valid-rows-container, .header-list select {
+    font-size: 0.5rem;
+  }
 }
