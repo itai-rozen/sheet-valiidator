@@ -7,6 +7,7 @@ function App() {
     <Router>
       <Routes>
         <Route element={<Main />}   path='/:event_hash' />
+        <Route element={<Main />}   path='/' />
       </Routes>
     </Router>
   </div>
