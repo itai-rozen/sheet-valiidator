@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { FaUpload } from 'react-icons/fa'
 import './inputs.css'
 
 const Inputs = ({
@@ -17,7 +17,17 @@ const Inputs = ({
 
 
   return <div className="input-container">
-    <input className='file-input' type="file" onChange={uploadFile} />
+    <label htmlFor="file">
+    <div className="button-like">
+    <FaUpload />
+    <p>
+    העלה קובץ
+
+    </p>
+    </div>
+    
+    <input className='file-input' id="file" type="file" onChange={uploadFile} />
+    </label>
     {/* <button disabled={!tableKeys.length || !Object.keys(validations).length } onClick={validateSheet}>בדוק</button> */}
     {/* <button disabled={!tableKeys.length} onClick={() => setShowModal(true)}>מפה את הקובץ</button> */}
     <button disabled={!validData.length || !sqlHeaders.target_name} onClick={uploadToServer}>טען שורות תקינות</button>
