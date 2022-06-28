@@ -97,7 +97,7 @@ const Problems = ({ downloadFile,
           })}
         </ul>
       </div>
-        <button disabled={!problems.length} onClick={downloadProblems}>Excel הורד שורות שגויות בקובץ </button>
+        <button disabled={!problems.length} onClick={downloadProblems}> הורד שורות שגויות בקובץ Excel</button>
     </div>
   </div>
 
