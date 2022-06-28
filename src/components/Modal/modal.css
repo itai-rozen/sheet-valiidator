@@ -8,7 +8,7 @@
 .field-input{
     width: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .field-input select, .field-input button {

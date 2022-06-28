@@ -4,6 +4,11 @@
   padding: 0;
   box-sizing: border-box;
   font-family:  'Rubik', sans-serif;
+  transition: .2s;
+}
+
+*:hover, *:disabled, *>* {
+  transition: .2s;
 }
 
 .App {
@@ -30,7 +35,7 @@ button {
   background-color: white;
   direction: rtl;
 }
-
+button:disabled { background-color: white; background: white;}
 .modal-container {
   z-index: 1;
   position: absolute;

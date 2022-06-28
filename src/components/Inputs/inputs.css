@@ -24,7 +24,7 @@
 }
 
 .button-like { cursor: pointer;}
-
+.upload-btn { background: linear-gradient(to left, #06d6a0,#07d6b0,#06d6a0) ;}
 
 @media screen and (max-width:600px) {
   
