@@ -13,12 +13,11 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
   }
   const getHeader = header => Object.keys(sqlHeaders)[getHeaderIdx(header)]
   const getHeaderIdx = headerStr => Object.values(sqlHeaders).findIndex(headerVal => headerVal === headerStr)
-
+  // const hideAlertStr = () => setHide('hide')
   useEffect(() => {
-    setTimeout(() => {
-      setHide('hide')
-    }, 3000)
-  },3000)
+    setTimeout(() => setHide('hide'),3000)
+  },[])
+
   useEffect(() => {
        // eslint-disable-next-line
   }, [sqlHeaders])
