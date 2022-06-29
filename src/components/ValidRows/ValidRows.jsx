@@ -34,14 +34,20 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
             .map((header, i) =>
             {
               return (getHeader(header)) ?
-                <p className='data-item'>{sqlHeaderMap[getHeader(header)]}
+                <p className='data-item'>
                   {
                     getHeader(header) === 'target_phone' ||
-                    <span onClick={() => setSqlHeaders({ ...sqlHeaders, [getHeader(header)]: '' })}>✎</span>
+                    <span  onClick={() => setSqlHeaders({ ...sqlHeaders, [getHeader(header)]: '' })}>✎</span>
                   }
+                  &nbsp;
+                  {sqlHeaderMap[getHeader(header)]}
                 </p> :
                 <p className='data-item'>
-                  <select name="" id="" defaultValue='' onChange={e => setSqlHeaders({ ...sqlHeaders, [e.target.value]: header })} >
+                  <select 
+                      name="" 
+                      id="" 
+                      defaultValue='' 
+                      onChange={e => setSqlHeaders({ ...sqlHeaders, [e.target.value]: header })} >
                     <>
                       <option disabled value=''>שייך שדה</option>
                       {
@@ -53,7 +59,6 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
                               {sqlHeaderMap[sqlHeader]}
                             </option>
                           })
-
                       }
                     </>
                   </select>
@@ -71,7 +76,9 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
                   .filter(tableKey => tableKey !== 'rowNum')
                   .reverse()
                   .map((tableKey, i) => {
-                    return <p key={tableKey + i} className='data-item'>{validRow[tableKey]}</p>
+                    return <p key={tableKey + i} className='data-item'>
+                      {validRow[tableKey]}
+                    </p>
                   })
               }
             </li>
