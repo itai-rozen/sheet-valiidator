@@ -55,7 +55,6 @@ const Main = () => {
   }
 
   const getPhoneColIdx = () => {
-    console.log('sheet: ', sheetData)
     for (let i = 0; i < sheetData.length; i++) {
       const row = sheetData[i]
       for (const field in row) {
@@ -107,15 +106,11 @@ const Main = () => {
     setShowProblemsStr(true)
   }
 
-
-
   const addProblem = (rowNum, validationType, value, field) => {
     const problemObj = { rowNum: rowNum + 1, problem: validationType, value: value, field: field }
     console.log('problem object: ', problemObj)
     setProblems(prevArr => [...prevArr, problemObj])
   }
-
-
 
   const validatePhone = (str, _ = '', _2 = '') => {
     const cleanStr = cleanString(str)
@@ -133,7 +128,9 @@ const Main = () => {
     }
     return ''
   }
+
   const getHash = () => Math.random().toString(36).substring(5);
+
   const uploadToServer = () => {
     let sqlStr = {}
     validData.forEach(validRowObj => {
@@ -210,7 +207,7 @@ const Main = () => {
       showProblemsStr && <div className='problem-msg-container'>
         <h2>
           בקובץ קיימות
-          <span style={{ color: 'yellow' }}> {problems.length} </span> שורות שגויות מתוך {sheetData.length}
+          <span className='yellow'> {problems.length} </span> שורות שגויות מתוך {sheetData.length}
           </h2>
         <button disabled={!problems.length} onClick={() => setShowProblems(true)}>הצג</button>
       </div>
