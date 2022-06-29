@@ -34,9 +34,38 @@
 .data-item > span {
   cursor: pointer;
 }
+.phone {
+  position: absolute;
+  top: 50vh;
+  width: 90%;
+  left: 5%;
+  display: none;
+  color: red;
+  font-size: 2rem;
+  z-index: 1;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: white;
+  padding: 5px 10px;
+}
+.phone.hide {display: none;}
 
 @media screen and (max-width:600px) {
+  .phone {display: block;}
   .valid-rows-container, .header-list select {
     font-size: 0.5rem;
+  }
+  .header-item { display: none;}
+  .row-item {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    margin-right: 2rem;
+    font-size: 1.5rem;
+    width: 100vw;
+    border-bottom: 1px solid black;
+  }
+  .valid-list > li > p {
+    padding-right: 1rem;
+    width: 100%;
   }
 }
