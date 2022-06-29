@@ -36,5 +36,8 @@
     padding: 5px 10px;
     margin: 2px 4px;
   }
+  .upload-btn {
+    display: none;
+  }
   
 }
