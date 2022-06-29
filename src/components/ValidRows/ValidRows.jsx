@@ -1,27 +1,35 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import './validRows.css'
 
 const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
+  const [hide,setHide] = useState('')
   const sqlHeaderMap = {
     target_phone: 'טלפון',
     target_name: 'שם',
     aff: 'קרבה',
     notes: 'הערות',
-    modifier: 'מזמין',
+    inviter: 'מזמין',
     email: 'E-mail'
   }
   const getHeader = header => Object.keys(sqlHeaders)[getHeaderIdx(header)]
   const getHeaderIdx = headerStr => Object.values(sqlHeaders).findIndex(headerVal => headerVal === headerStr)
 
   useEffect(() => {
+    setTimeout(() => {
+      setHide('hide')
+    }, 3000)
+  },3000)
+  useEffect(() => {
        // eslint-disable-next-line
   }, [sqlHeaders])
 
   return <div className="valid-rows-container">
+    <p className={`phone ${hide}`}>ניתן לערוך ולטעון את הקובץ דרך המחשב בלבד</p>
     <ul className="valid-list">
       <li className="header-item">
         {
-          Object.keys(validData[0]).reverse()
+          Object.keys(validData[0])
+            .reverse()
             .filter(header => header !== 'rowNum')
             .map((header, i) =>
             {
@@ -29,7 +37,7 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
                 <p className='data-item'>{sqlHeaderMap[getHeader(header)]}
                   {
                     getHeader(header) === 'target_phone' ||
-                    <span onClick={() => setSqlHeaders({ ...sqlHeaders, [getHeader(header)]: '' })}>❌</span>
+                    <span onClick={() => setSqlHeaders({ ...sqlHeaders, [getHeader(header)]: '' })}>✎</span>
                   }
                 </p> :
                 <p className='data-item'>
@@ -65,7 +73,6 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
                   .map((tableKey, i) => {
                     return <p key={tableKey + i} className='data-item'>{validRow[tableKey]}</p>
                   })
-
               }
             </li>
           })
