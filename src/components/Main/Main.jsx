@@ -18,12 +18,10 @@ const Main = () => {
   const [problems, setProblems] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [sqlHeaders, setSqlHeaders] = useState({
-    target_phone: '', target_name: '', aff: '', notes: '', modifier: '', email: ''
+    target_phone: '', target_name: '', aff: '', notes: '', inviter: '', email: ''
   })
   const [validData, setValidData] = useState([])
-  const PATH = process.env.NODE_ENV === 'development' ?
-    'http://localhost:3001/' :
-    'sheet-validator-server.eu-west-1.elasticbeanstalk.com'
+  const PATH = 'sheet-validator-server.eu-west-1.elasticbeanstalk.com'
 
   const { event_hash } = useParams()
 
