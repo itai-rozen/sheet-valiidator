@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import './problems.css'
 
-const Problems = ({ downloadFile, 
-                    problems, 
-                    setShowProblems, 
-                    sheetData, 
-                    setProblems, 
-                    setSheetData, 
-                    validateSheet }) => {
+const Problems = ({ downloadFile,
+  problems,
+  setShowProblems,
+  sheetData,
+  setProblems,
+  setSheetData,
+  validateSheet }) => {
   const [rowNumFix, setRowNumFix] = useState(-1)
-  const [valueToFix,setValueToFix] = useState('')
+  const [valueToFix, setValueToFix] = useState('')
 
 
   const downloadProblems = () => {
     const problemRowNums = problems.map(problem => problem.rowNum)
-    const problemItems =  sheetData.filter(item => (problemRowNums.includes(item.__rowNum__+1)))
-    downloadFile(problemItems,'invites_problems')
+    const problemItems = sheetData.filter(item => (problemRowNums.includes(item.__rowNum__ + 1)))
+    downloadFile(problemItems, 'invites_problems')
   }
 
   const editRow = problemObj => {
@@ -31,7 +31,7 @@ const Problems = ({ downloadFile,
   const onlyNumbers = val => val.match(/[0-9]/g)
 
   const saveChanges = (problemField) => {
-    
+
     setSheetData(sheetData.map(dataItem => {
       if (dataItem.__rowNum__ === rowNumFix - 1) dataItem[problemField] = onlyNumbers(valueToFix) ? +valueToFix : valueToFix
       return dataItem
@@ -48,12 +48,12 @@ const Problems = ({ downloadFile,
   const discardChanges = () => {
     setRowNumFix(-1)
     setValueToFix('')
-  } 
+  }
 
   useEffect(() => {
-     (!problems.length) && setShowProblems(false)
-        // eslint-disable-next-line
-  },[rowNumFix,problems])
+    (!problems.length) && setShowProblems(false)
+    // eslint-disable-next-line
+  }, [rowNumFix, problems])
 
 
   return <div className="modal-container">
@@ -77,17 +77,22 @@ const Problems = ({ downloadFile,
                 <p className="row-problem">{problem.problem}</p>
                 <p className="row-problem grow">
                   {
-                    (problem.rowNum === rowNumFix) ? 
-                      <input  defaultValue={valueToFix} onChange={e => setValueToFix(e.target.value)} /> : 
-                      <>{problem.value || <i><strong>(ריק)</strong></i>}</>
+                    (problem.rowNum === rowNumFix) ?
+                      <input 
+                        defaultValue={valueToFix} 
+                        onChange={e => setValueToFix(e.target.value)} /> :
+                      <>
+                        {(problem.value?.length > 16) ? problem.value.slice(0, 16) + '...' : problem.value ||
+                          <i><strong>(ריק)</strong></i>}
+                      </>
                   }
                 </p>
-                {(problem.rowNum === rowNumFix) ? 
+                {(problem.rowNum === rowNumFix) ?
                   <>
                     <p className="change-row no-under" onClick={() => saveChanges(problem.field)}>✔️</p>
                     <p className="change-row no-under" onClick={discardChanges}>❌</p>
                   </>
-                  : 
+                  :
                   <>
                     <p className='change-row' onClick={() => editRow(problem)}>תקן</p>
                     <p className='change-row' onClick={() => deleteRow(problem.rowNum)}>מחק</p>
@@ -98,7 +103,7 @@ const Problems = ({ downloadFile,
           })}
         </ul>
       </div>
-        <button disabled={!problems.length} onClick={downloadProblems}> הורד שורות שגויות בקובץ Excel</button>
+      <button disabled={!problems.length} onClick={downloadProblems}> הורד שורות שגויות בקובץ Excel</button>
     </div>
   </div>
 
