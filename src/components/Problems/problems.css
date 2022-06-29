@@ -71,5 +71,11 @@
   .list-container input {
     font-size: 0.6rem;
   }
+  .change-row { display: none;}
+  .problem-container > *, .problem-header {
+    font-size: 1rem;
+    width: 30%;
+  }
+  .problem-hide {display: none;}
 }
 

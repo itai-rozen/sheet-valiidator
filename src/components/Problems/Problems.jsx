@@ -66,8 +66,8 @@ const Problems = ({ downloadFile,
           <li className="problem-header">מס' שורה</li>
           <li className="problem-header">סוג שגיאה</li>
           <li className="problem-header grow">ערך</li>
-          <li></li>
-          <li></li>
+          <li className='problem-hide'></li>
+          <li className='problem-hide'></li>
         </ul>
         <ul className="problem-list">
           {problems.map((problem, i) => {
