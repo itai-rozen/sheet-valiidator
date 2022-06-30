@@ -30,23 +30,16 @@ const Main = () => {
   const uploadFile = e => {
     setIsLoading(true)
     const file = e.target.files[0]
-    console.log('file : ',file)
-    if (file.type === 'text/csv') console.log('CSV!!!!!!!!!1')
     const fileReader = new FileReader()
     file.type === 'text/csv' ?
     fileReader.readAsText(file) :
     fileReader.readAsArrayBuffer(file)
         
     fileReader.onload = e => {
-      console.log('event: ',e)
       const bufferArray = e.target.result
-      console.log('buffer array: ',bufferArray)
       const workBook = XLSX.read(bufferArray, { type: file.type === 'text/csv' ? 'string' : "buffer" })
-      // const parsedWb = XLSX.en
-      console.log('work book : ',workBook)
       const workSheetName = workBook.SheetNames[0]
       const workSheet = workBook.Sheets[workSheetName]
-      console.log('work sheet: ',workSheet)
       getTableKeys(workSheet)
       const data = XLSX.utils.sheet_to_json(workSheet)
 
@@ -58,7 +51,6 @@ const Main = () => {
   const updatePhoneValidation = () => {
     const phoneColHeader = getPhoneColHeader()
     setSqlHeaders({ ...sqlHeaders, target_phone: phoneColHeader })
-    console.log('phone header: ',phoneColHeader)
     if (!phoneColHeader) {
       alert('הקובץ לא מכיל שדה תקין של מספרי טלפון. טען קובץ חדש.')
       setSheetData([])
