@@ -29,6 +29,7 @@ const Main = () => {
   const uploadFile = e => {
     setIsLoading(true)
     const file = e.target.files[0]
+    console.log('file : ',file)
     const fileReader = new FileReader()
     fileReader.readAsArrayBuffer(file)
 
@@ -38,15 +39,16 @@ const Main = () => {
       const workSheetName = workBook.SheetNames[0]
       const workSheet = workBook.Sheets[workSheetName]
       getTableKeys(workSheet)
-      const data = XLSX.utils.sheet_to_json(workSheet)
+      const data = XLSX.utils.sheet_to_json(workSheet, {raw:true})
       setSheetData(data)
     }
     setIsLoading(false)
   }
 
   const updatePhoneValidation = () => {
-    const phoneColHeader = getPhoneColIdx()
+    const phoneColHeader = getPhoneColHeader()
     setSqlHeaders({ ...sqlHeaders, target_phone: phoneColHeader })
+    console.log('phone header: ',phoneColHeader)
     if (!phoneColHeader) {
       alert('הקובץ לא מכיל שדה תקין של מספרי טלפון. טען קובץ חדש.')
       setSheetData([])
@@ -54,7 +56,7 @@ const Main = () => {
     }
   }
 
-  const getPhoneColIdx = () => {
+  const getPhoneColHeader = () => {
     for (let i = 0; i < sheetData.length; i++) {
       const row = sheetData[i]
       for (const field in row) {
@@ -108,7 +110,7 @@ const Main = () => {
 
   const addProblem = (rowNum, validationType, value, field) => {
     const problemObj = { rowNum: rowNum + 1, problem: validationType, value: value, field: field }
-    console.log('problem object: ', problemObj)
+    // console.log('problem object: ', problemObj)
     setProblems(prevArr => [...prevArr, problemObj])
   }
 
@@ -120,7 +122,7 @@ const Main = () => {
 
   const validateDuplicateCells = (str, i, col) => sheetData.find((row, index) => (str && row[col] === str && i !== index))
 
-  const cleanString = str => (str + '').replace(/^972|[+().]/g, '')
+  const cleanString = str => (str + '').replace(/^972|[+()-.]/g, '').trim()
 
   const getSqlHeader = str => {
     for (const header in sqlHeaders) {
@@ -176,6 +178,7 @@ const Main = () => {
 
 
   useEffect(() => {
+    console.log('sheet: ',sheetData)
     sheetData.length && saveToLocalStorage(sheetData)
     if (sheetData.length && !sqlHeaders.target_phone) updatePhoneValidation()
        // eslint-disable-next-line
