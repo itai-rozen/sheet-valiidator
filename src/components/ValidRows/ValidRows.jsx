@@ -13,12 +13,12 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
   }
   const getHeader = header => Object.keys(sqlHeaders)[getHeaderIdx(header)]
   const getHeaderIdx = headerStr => Object.values(sqlHeaders).findIndex(headerVal => headerVal === headerStr)
-  // const hideAlertStr = () => setHide('hide')
   useEffect(() => {
     setTimeout(() => setHide('hide'),3000)
   },[])
 
   useEffect(() => {
+    console.log(sqlHeaders)
        // eslint-disable-next-line
   }, [sqlHeaders])
 
@@ -27,13 +27,12 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
     <ul className="valid-list">
       <li className="header-item">
         {
-          Object.keys(validData[0])
-            .reverse()
+          tableKeys
             .filter(header => header !== 'rowNum')
             .map((header, i) =>
             {
               return (getHeader(header)) ?
-                <p className='data-item'>
+                <p key={header+i} className='data-item'>
                   {
                     getHeader(header) === 'target_phone' ||
                     <span  onClick={() => setSqlHeaders({ ...sqlHeaders, [getHeader(header)]: '' })}>✎</span>
@@ -41,7 +40,7 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
                   &nbsp;
                   {sqlHeaderMap[getHeader(header)]}
                 </p> :
-                <p className='data-item'>
+                <p key={header+i} className='data-item'>
                   <select 
                       name="" 
                       id="" 
@@ -64,9 +63,10 @@ const ValidRows = ({ validData, sqlHeaders, setSqlHeaders, tableKeys }) => {
                 </p>
             }
             )
+            .reverse()
         }
       </li>
-
+      
         {
           validData.map((validRow, i) => {
             return <li key={i} className='row-item'>

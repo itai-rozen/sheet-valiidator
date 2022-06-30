@@ -3,7 +3,8 @@
   height: 65%;
   width: 100%;
   box-sizing: border-box;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: auto;
 
 }
 
@@ -11,12 +12,14 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  text-align: right;
 
 }
 
 .valid-list > li > p {
   width: 15%;
   text-align: right;
+  word-break: break-all;
 }
 .header-item { font-weight: bold;}
 .valid-list select {
