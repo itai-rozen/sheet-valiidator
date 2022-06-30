@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import * as XLSX from 'xlsx'
+// import fs from 'fs'
 import Inputs from '../Inputs/Inputs'
 import Loader from '../Loader/Loader'
 import Problems from '../Problems/Problems'
@@ -30,16 +31,25 @@ const Main = () => {
     setIsLoading(true)
     const file = e.target.files[0]
     console.log('file : ',file)
+    if (file.type === 'text/csv') console.log('CSV!!!!!!!!!1')
     const fileReader = new FileReader()
+    file.type === 'text/csv' ?
+    fileReader.readAsText(file) :
     fileReader.readAsArrayBuffer(file)
-
+        
     fileReader.onload = e => {
+      console.log('event: ',e)
       const bufferArray = e.target.result
-      const workBook = XLSX.read(bufferArray, { type: "buffer" })
+      console.log('buffer array: ',bufferArray)
+      const workBook = XLSX.read(bufferArray, { type: file.type === 'text/csv' ? 'string' : "buffer" })
+      // const parsedWb = XLSX.en
+      console.log('work book : ',workBook)
       const workSheetName = workBook.SheetNames[0]
       const workSheet = workBook.Sheets[workSheetName]
+      console.log('work sheet: ',workSheet)
       getTableKeys(workSheet)
-      const data = XLSX.utils.sheet_to_json(workSheet, {raw:true})
+      const data = XLSX.utils.sheet_to_json(workSheet)
+
       setSheetData(data)
     }
     setIsLoading(false)
