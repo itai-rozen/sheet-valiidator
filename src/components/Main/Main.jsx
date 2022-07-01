@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import * as XLSX from 'xlsx'
-// import fs from 'fs'
 import Inputs from '../Inputs/Inputs'
 import Loader from '../Loader/Loader'
 import Problems from '../Problems/Problems'
@@ -29,23 +28,29 @@ const Main = () => {
 
   const uploadFile = e => {
     setIsLoading(true)
-    const file = e.target.files[0]
-    const fileReader = new FileReader()
-    file.type === 'text/csv' ?
-    fileReader.readAsText(file) :
-    fileReader.readAsArrayBuffer(file)
-        
-    fileReader.onload = e => {
-      const bufferArray = e.target.result
-      const workBook = XLSX.read(bufferArray, { type: file.type === 'text/csv' ? 'string' : "buffer" })
-      const workSheetName = workBook.SheetNames[0]
-      const workSheet = workBook.Sheets[workSheetName]
-      getTableKeys(workSheet)
-      const data = XLSX.utils.sheet_to_json(workSheet)
+    try {
 
-      setSheetData(data)
+      const file = e.target.files[0]
+      const fileReader = new FileReader()
+      file.type === 'text/csv' ?
+        fileReader.readAsText(file) :
+        fileReader.readAsArrayBuffer(file)
+
+      fileReader.onload = e => {
+        const bufferArray = e.target.result
+        const workBook = XLSX.read(bufferArray, { type: file.type === 'text/csv' ? 'string' : "buffer" })
+        const workSheetName = workBook.SheetNames[0]
+        const workSheet = workBook.Sheets[workSheetName]
+        getTableKeys(workSheet)
+        const data = XLSX.utils.sheet_to_json(workSheet)
+
+        setSheetData(data)
+      }
+      setIsLoading(false)
+    } catch (err) {
+      console.log('error at uploading: ', err)
     }
-    setIsLoading(false)
+
   }
 
   const updatePhoneValidation = () => {
@@ -180,19 +185,19 @@ const Main = () => {
 
 
   useEffect(() => {
-    console.log('sheet: ',sheetData)
+    console.log('sheet: ', sheetData)
     sheetData.length && saveToLocalStorage(sheetData)
     if (sheetData.length && !sqlHeaders.target_phone) updatePhoneValidation()
-       // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [sheetData])
 
   useEffect(() => {
     if (sqlHeaders.target_phone) validateSheet()
-       // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [sqlHeaders.target_phone])
 
   return <div className="main-container">
-    <h1>רשימת תפוצה</h1>
+    <h1>d</h1>
     <Inputs
       downloadFile={downloadFile}
       uploadFile={uploadFile}
@@ -213,7 +218,7 @@ const Main = () => {
         <h2>
           בקובץ קיימות
           <span className='yellow'> {problems.length} </span> שורות שגויות מתוך {sheetData.length}
-          </h2>
+        </h2>
         <button disabled={!problems.length} onClick={() => setShowProblems(true)}>הצג</button>
       </div>
     }

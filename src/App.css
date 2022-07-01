@@ -35,7 +35,12 @@ button {
   background-color: white;
   direction: rtl;
 }
-button:disabled { background-color: white; background: white;}
+
+button:disabled { 
+  background-color: white;
+  cursor: not-allowed;
+}
+
 .modal-container {
   z-index: 1;
   position: absolute;

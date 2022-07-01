@@ -6,8 +6,8 @@ function App() {
   return <div className="App">
     <Router>
       <Routes>
-        <Route element={<Main />}   path='/:event_hash' />
         <Route element={<Main />}   path='/' />
+        <Route element={<Main />}   path='/:event_hash' />
       </Routes>
     </Router>
   </div>

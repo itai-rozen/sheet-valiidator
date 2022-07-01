@@ -5,6 +5,7 @@
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: auto;
+  background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
 
 }
 
@@ -20,6 +21,7 @@
   width: 15%;
   text-align: right;
   word-break: break-all;
+  padding: 0 2px;
 }
 .header-item { font-weight: bold;}
 .valid-list select {

@@ -21,8 +21,7 @@ const Inputs = ({
     <div className="button-like">
     <FaUpload />
     <p>
-    העלה קובץ
-
+     העלה קובץ רשימת אורחים
     </p>
     </div>
     
