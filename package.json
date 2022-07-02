@@ -1,6 +1,5 @@
 {
   "name": "sheet-validator",
-  "homepage": "https://sheet-validator.netlify.app/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
