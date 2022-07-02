@@ -6,7 +6,10 @@ function App() {
   return <div className="App">
     <Router>
       <Routes>
-        <Route path="/*" element={<Main />} />
+        <Route path="/" element={<Main />} >
+          <Route path=":event_hash" element={<Main />} />
+          <Route path="" element={<Main />} />
+        </Route>
       </Routes>
     </Router>
   </div>
