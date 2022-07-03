@@ -21,7 +21,7 @@ const Main = () => {
     target_phone: '', target_name: '', aff: '', notes: '', inviter: '', email: ''
   })
   const [validData, setValidData] = useState([])
-  const PATH = 'sheet-validator-server.eu-west-1.elasticbeanstalk.com/'
+  const PATH = '/'
 
   const { event_hash } = useParams()
 
@@ -156,10 +156,10 @@ const Main = () => {
     })
     // removeFromLocalStorage()
   }
-  const addRowToSql = async (rowObj, endpoint = '') => {
+  const addRowToSql = async (rowObj) => {
     try {
 
-      await fetch(`${PATH}/${endpoint}`, {
+      await fetch(`${PATH}/`, {
         method: 'POST',
         mode: 'no-cors',
         headers: {
