@@ -21,7 +21,7 @@ const Main = () => {
     target_phone: '', target_name: '', aff: '', notes: '', inviter: '', email: ''
   })
   const [validData, setValidData] = useState([])
-  const PATH = ''
+  const PATH = 'http://sheet-validator-server.eu-west-1.elasticbeanstalk.com'
 
   const { event_hash } = useParams()
 
