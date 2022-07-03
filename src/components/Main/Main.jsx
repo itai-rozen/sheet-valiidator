@@ -7,6 +7,7 @@ import Problems from '../Problems/Problems'
 import { saveToLocalStorage } from '../../localStorageService'
 import './main.css'
 import ValidRows from '../ValidRows/ValidRows'
+import axios from 'axios'
 
 const Main = () => {
   const [sheetData, setSheetData] = useState([])
@@ -22,6 +23,7 @@ const Main = () => {
   })
   const [validData, setValidData] = useState([])
   const PATH = 'http://sheet-validator-server.eu-west-1.elasticbeanstalk.com'
+  
 
   const { event_hash } = useParams()
 
@@ -156,18 +158,32 @@ const Main = () => {
     })
     // removeFromLocalStorage()
   }
+
+  /*
+  const createPostRequest = async () => {
+	try{
+		const { data } = await axios.post(url, body_data, {
+		   headers: {
+	    	 'Authorization': `Basic ${token}`
+		   },
+		})
+    
+	    console.log(data)
+	} catch (error) {
+		console.log(error)
+	}
+}
+ 
+  */
   const addRowToSql = async (rowObj) => {
     try {
 
-      await fetch(`${PATH}/`, {
-        method: 'POST',
-        mode: 'no-cors',
+      await axios.post(`${PATH}/`,rowObj, {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(rowObj)
+        }      
       });
     }
     catch (err) {
