@@ -246,7 +246,7 @@ const Main = () => {
   // }
 
   useEffect(() => {
-    test()
+    // test()
     console.log('sheet: ', sheetData)
     sheetData.length && saveToLocalStorage(sheetData)
     if (sheetData.length && !sqlHeaders.target_phone) updatePhoneValidation()
