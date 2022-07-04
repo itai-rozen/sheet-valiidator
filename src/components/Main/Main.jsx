@@ -22,7 +22,7 @@ const Main = () => {
     target_phone: '', target_name: '', aff: '', notes: '', inviter: '', email: ''
   })
   const [validData, setValidData] = useState([])
-  const PATH = 'http://sheet-validator-server.eu-west-1.elasticbeanstalk.com'
+  const PATH = 'sheet-validator-server.eu-west-1.elasticbeanstalk.com'
   
 
   const { event_hash } = useParams()
@@ -176,18 +176,31 @@ const Main = () => {
  
   */
   const addRowToSql = async (rowObj) => {
+    setIsLoading(true)
     try {
-
-      await axios.post(`${PATH}/`,rowObj, {
+      await fetch(PATH, {
+        method: 'POST',
+        mode: 'no-cors',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        }      
+        },
+        body: JSON.stringify(rowObj)
       });
+
+      // await axios.post(`${PATH}`,rowObj, {
+      //   headers: {
+      //     'Access-Control-Allow-Origin': '*',
+      //     'Accept': 'application/json',
+      //     'Content-Type': 'application/json'
+      //   }      
+      // });
+      setIsLoading(false)
     }
     catch (err) {
       console.log(err.message)
+      setIsLoading(false)
     }
   }
 
