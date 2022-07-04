@@ -211,31 +211,31 @@ const Main = () => {
     await XLSX.writeFile(newWorkBook, `${fileName}.xlsx`)
   }
 
-  const test = async () => {
-    const rowObj = {
-      "target_name":'testy test', 
-      "target_phone":500000000, 
-      "hash":'qwerty', 
-      "event_hash":event_hash, 
-      "isDick": 0, 
-      "isactive": 0
-    }
-    try {
-      const data = await fetch(PATH, {
-        method: 'POST',
-        // mode: 'cors',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(rowObj)
-      });
-      console.log('data: ',data)
-    } catch(err){
-      console.log('error: ',err)
-    }
-  }
+  // const test = async () => {
+  //   const rowObj = {
+  //     "target_name":'testy test', 
+  //     "target_phone":500000000, 
+  //     "hash":'qwerty', 
+  //     "event_hash":event_hash, 
+  //     "isDick": 0, 
+  //     "isactive": 0
+  //   }
+  //   try {
+  //     const data = await fetch(PATH, {
+  //       method: 'POST',
+  //       // mode: 'cors',
+  //       headers: {
+  //         'Access-Control-Allow-Origin': '*',
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify(rowObj)
+  //     });
+  //     console.log('data: ',data)
+  //   } catch(err){
+  //     console.log('error: ',err)
+  //   }
+  // }
 
   useEffect(() => {
     // test()
