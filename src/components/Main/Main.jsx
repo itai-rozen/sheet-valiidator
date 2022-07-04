@@ -7,7 +7,7 @@ import Problems from '../Problems/Problems'
 import { saveToLocalStorage } from '../../localStorageService'
 import './main.css'
 import ValidRows from '../ValidRows/ValidRows'
-// import axios from 'axios'
+import axios from 'axios'
 
 const Main = () => {
   const [sheetData, setSheetData] = useState([])
@@ -22,7 +22,7 @@ const Main = () => {
     target_phone: '', target_name: '', aff: '', notes: '', inviter: '', email: ''
   })
   const [validData, setValidData] = useState([])
-  const PATH = 'sheet-validator-server.eu-west-1.elasticbeanstalk.com'
+  const PATH = 'http://sheet-validator-server.eu-west-1.elasticbeanstalk.com'
   
 
   const { event_hash } = useParams()
@@ -175,10 +175,10 @@ const Main = () => {
 }
  
   */
-  const addRowToSql = async (rowObj) => {
+  const addRowToSql = async (rowObj, endpoint = '') => {
     setIsLoading(true)
     try {
-      await fetch(PATH, {
+      await fetch(`${PATH}/${endpoint}`, {
         method: 'POST',
         mode: 'no-cors',
         headers: {
@@ -199,7 +199,7 @@ const Main = () => {
       setIsLoading(false)
     }
     catch (err) {
-      console.log(err.message)
+      console.dir(err)
       setIsLoading(false)
     }
   }
@@ -212,8 +212,34 @@ const Main = () => {
     await XLSX.writeFile(newWorkBook, `${fileName}.xlsx`)
   }
 
+  const test = async () => {
+    const rowObj = {
+      "target_name":'testy test', 
+      "target_phone":500000000, 
+      "hash":'qwerty', 
+      "event_hash":event_hash, 
+      "isDick": 0, 
+      "isactive": 0
+    }
+    try {
+      const data = await fetch(PATH, {
+        method: 'POST',
+        // mode: 'cors',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(rowObj)
+      });
+      console.log('data: ',data)
+    } catch(err){
+      console.log('error: ',err)
+    }
+  }
 
   useEffect(() => {
+    // test()
     console.log('sheet: ', sheetData)
     sheetData.length && saveToLocalStorage(sheetData)
     if (sheetData.length && !sqlHeaders.target_phone) updatePhoneValidation()
